@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as userService from "../services/userService"
-import brcypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -26,3 +26,46 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
+export const loginUser = async (req: Request, res: Response) => {
+  const email = String(req.body.email || "").trim().toLowerCase();
+  const { password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+  try {
+    const user = await userService.findUserByEmail(email);
+
+   
+    if (!user || !user.password_hash) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password_hash);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+  
+    if (user.account_status === "blocked") {
+      return res.status(403).json({ message: "Your account has been blocked" });
+    }
+
+    const payload = { userId: user.id, email: user.email, role: user.role };
+    const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "1h" });
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error logging in" });
+  }
+};
