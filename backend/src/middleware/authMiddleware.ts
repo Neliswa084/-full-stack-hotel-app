@@ -7,34 +7,24 @@ interface JwtPayload {
     userId: number;
     email: string;
 }
-
 export const protect = async (req: Request, res: Response, next: NextFunction) => {
-    let token;
-    if 
-    
-        (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) 
-    {
-        try{
-            console.log(req.headers , "request headers ")
-            console.log(req.headers.authorization, "token ")
-            token = req.headers.authorization.split(" ")[1];
-            const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-            console.log(decoded , "decoded token")
-            const user: User | null = await findUserByEmail(decoded.email);
-
-            req.user = user || undefined;
-
-            if (!req.user){
-                return res.status(401).json({ message: "Not authorized, user not found" });
-            }
-
-            return next();
-        } catch (error) {
-            return res.status(401).json({ message: "Not authorized, token failed" });
-        }
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Not authorized, no token" });
+  }
+  try {
+    const token = header.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const user = await findUserByEmail(decoded.email);
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized, user not found" });
     }
-    else {
-        res.status(401).json({ message: "Not authorized, no token" });
-    } 
-     return res.status(401).json({ message: "Not authorized" });
-}
+    if (user.account_status === "blocked") {
+      return res.status(403).json({ message: "Your account has been blocked" });
+    }
+    req.user = user;
+    return next();
+  } catch (error) {
+    return res.status(401).json({ message: "Not authorized, token failed" });
+  }
+};
