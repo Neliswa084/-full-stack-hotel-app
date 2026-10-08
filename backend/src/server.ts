@@ -1,5 +1,6 @@
 import express from "express"
 import dotenv from "dotenv"
+import { testDbConnection } from "./config/database"
 
 
 
@@ -9,7 +10,7 @@ const app = express()
 const PORT = process.env.PORT || 4000
 
 const startServer = async () => {
-  
+    await testDbConnection()
 
   app.use(express.json())
 
@@ -18,5 +19,5 @@ const startServer = async () => {
     console.log(`Server is running on http://localhost:${PORT}`)
   })
 }
-
+ 
 startServer()
