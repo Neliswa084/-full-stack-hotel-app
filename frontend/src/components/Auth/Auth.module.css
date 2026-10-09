@@ -1,0 +1,22 @@
+.container {
+    background-color: rgb(215, 230, 250);
+ 
+
+}
+.switchText {
+  font-size: 13px;
+  color: #6B7280;
+  text-align: center;
+  margin: 0;
+}
+
+.link {
+  color:#13398a;;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
