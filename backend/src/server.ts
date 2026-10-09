@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import { testDbConnection } from "./config/database"
 import { initDb } from "./config/initDb"
 import authRoutes from "./routes/authRoutes"
+import cors from "cors"
 
 
 
@@ -16,6 +17,7 @@ const startServer = async () => {
   await initDb()
 
   app.use(express.json())
+app.use(cors())
 
   app.use("/api/auth", authRoutes)
 
