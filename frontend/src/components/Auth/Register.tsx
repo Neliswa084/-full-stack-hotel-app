@@ -1,6 +1,6 @@
 import React from 'react'
-import { TextInput } from '../UI/Inputs/TextInput'
-import { Button } from '../UI/Buttons/Button'
+import { TextInput } from '../../Components/UI/Inputs/TextInput'
+import {Button} from '../../Components/UI/Buttons/Button'
 import styles from '../Auth/Auth.module.css'
 import { useDispatch ,useSelector } from 'react-redux'
 import type { RootState ,AppDispatch } from '../../redux/store'
