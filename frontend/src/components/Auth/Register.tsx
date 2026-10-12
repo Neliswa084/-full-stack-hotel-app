@@ -58,7 +58,7 @@ export const Register = () => {
                 onChange={(e) => dispatch(setLastName(e.target.value))} />
             </div>
 
-            <TextInput label="Phone number (optional)" name="phoneNumber" type="tel" value={phone_number}
+            <TextInput label="Phone number" name="phoneNumber" type="tel" value={phone_number}
               onChange={(e) => dispatch(setPhoneNumber(e.target.value))} />
             <TextInput label="Email address" name="email" type="email" value={email}
               onChange={(e) => dispatch(setEmail(e.target.value))} />
