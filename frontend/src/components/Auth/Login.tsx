@@ -23,11 +23,11 @@ export const Login = () => {
     const result = await dispatch(loginUser({ email, password }))
 
     if (loginUser.fulfilled.match(result)) {
-      // admins go to the dashboard, guests go home
+      
       if (result.payload.user.role === 'admin') {
         navigate('/admin')
       } else {
-        navigate('/')
+        navigate('/home')
       }
     }
   }
