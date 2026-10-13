@@ -1,13 +1,24 @@
 import './App.css'
-import { Register } from './components/Auth/Register'
+import { Routes, Route } from 'react-router-dom'
+import { LandingPage } from './pages/LandingPage'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
+import { HomePage } from './pages/HomePage'
 
 function App() {
 
 
   return (
     <>
-        <h1>Hotel App</h1>
-        <Register />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/home" element={<HomePage />} />
+
+
+      </Routes>
     </>
   )
 }

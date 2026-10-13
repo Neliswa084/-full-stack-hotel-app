@@ -14,8 +14,8 @@ type InputProps ={
 export const TextInput:React.FC<InputProps> = ({id, value, onChange, style, label, error, name, type = 'text'}) => {
   return (
    <div className={styles['input-container']}>
-       <label className={styles['input-label']}>{label}</label>
-       <input name={name} type={type} id={id} style={style} value={value} onChange={onChange} className={styles.input}/>
+      <label className={styles['input-label']} htmlFor={id ?? name}>{label}</label>
+<input name={name} type={type} id={id ?? name} style={style} value={value} onChange={onChange} className={styles.input}/>
        {error && <span className={styles['input-error']}>{error}</span>}
     </div>
   )
