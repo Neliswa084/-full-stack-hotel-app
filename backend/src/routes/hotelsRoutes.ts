@@ -5,7 +5,7 @@ import {getAllHotels , getHotelById , addHotel , deleteHotel} from "../controlle
 const router = Router();
 
 router.get("/", getAllHotels);
-router.get("/hotels/:id", getHotelById);
+router.get("/:id", getHotelById);
 router.post("/", protect, adminOnly, addHotel);
 router.delete("/:id", protect, adminOnly, deleteHotel);
 

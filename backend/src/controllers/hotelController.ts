@@ -16,11 +16,12 @@ export const getAllHotels = async (req: Request, res: Response) => {
 export const getHotelById = async (req: Request, res: Response) => {
     try {
         const id = parseInt(String(req.params.id));
-        const hotel = await hotelsService.findHotelById(id);
+     
 
         if(isNaN(id)) {
             return res.status(400).json({ message: "Invalid hotel ID" });
         }
+        const hotel = await hotelsService.findHotelById(id);
 
         if (!hotel) {
             return res.status(404).json({ message: "Hotel not found" });
@@ -71,9 +72,20 @@ export const addHotel = async (req: Request, res: Response) => {
 export const deleteHotel = async (req: Request, res: Response) => {
     try {
         const id = parseInt(String(req.params.id));
-        await hotelsService.removeHotel(id);
+        if (isNaN(id)) {
+            return res.status(400).json({ message: "Invalid hotel ID" });
+        }
+
+        const hotel = await hotelsService.removeHotel(id);
+        if (!hotel) {
+            return res.status(404).json({ message: "Hotel not found" });
+        }
+
         res.status(200).json({ message: "Hotel deleted" });
-    } catch (error) {
+    } catch (error: any) {
+        if (error.code === "23503") {
+            return res.status(409).json({ message: "This hotel has bookings, hide it instead of deleting" });
+        }
         res.status(500).json({ message: "Failed to delete hotel" });
     }
 };

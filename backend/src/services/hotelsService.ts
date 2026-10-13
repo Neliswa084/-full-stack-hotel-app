@@ -36,9 +36,9 @@ export const createHotel = async (hotel: NewHotel): Promise<Hotel> => {
     return rows[0];
 };
 
-export const removeHotel = async (id: number): Promise<void> => {
+export const removeHotel = async (id: number): Promise<Hotel | null> => {
     const {rows} = await query(
-        "DELETE FROM hotels WHERE id = $1",
+        "DELETE FROM hotels WHERE id = $1 RETURNING *",
         [id]
     );  
     return rows[0] || null;
