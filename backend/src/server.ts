@@ -5,6 +5,7 @@ import { initDb } from "./config/initDb"
 import cors from "cors"
 import authRoutes from "./routes/authRoutes"
 import hotelsRoutes from "./routes/hotelsRoutes"
+import roomRoutes from "./routes/roomRoutes"
 
 
 
@@ -22,6 +23,7 @@ app.use(cors())
 
   app.use("/api/auth", authRoutes)
   app.use("/api/hotels", hotelsRoutes)
+  app.use("/api/rooms", roomRoutes)
 
 
   app.listen(PORT, () => {
