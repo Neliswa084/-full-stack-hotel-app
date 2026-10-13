@@ -34,12 +34,12 @@ export const Register = () => {
         <aside className={styles.brandPanel}>
           <Link to="/" className={styles.brand}>BUDGIE STAYS</Link>
           <div>
-            <h2 className={styles.brandTitle}>Join the flock</h2>
+            {/* <h2 className={styles.brandTitle}>Join the flock</h2>
             <ul className={styles.perks}>
               <li>Book cosy hotels in a few clicks</li>
               <li>Save your favourite stays</li>
               <li>Keep all your bookings in one place</li>
-            </ul>
+            </ul> */}
           </div>
         </aside>
 
