@@ -9,3 +9,11 @@ export const findAllHotels = async (): Promise<Hotel[]> => {
     );
     return rows
 }
+
+export const findHotelById = async (id: number): Promise<Hotel | null> => {
+    const {rows} = await query(
+        "SELECT * FROM hotels WHERE id = $1 AND is_visible = true",
+        [id]
+    );
+    return rows[0] || null;
+};
