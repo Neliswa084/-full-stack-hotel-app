@@ -67,3 +67,13 @@ export const addHotel = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Failed to create hotel" });
     }
 };
+
+export const deleteHotel = async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(String(req.params.id));
+        await hotelsService.removeHotel(id);
+        res.status(200).json({ message: "Hotel deleted" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to delete hotel" });
+    }
+};

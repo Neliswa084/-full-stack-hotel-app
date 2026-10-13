@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { protect, adminOnly } from "../middleware/authMiddleware";
-import {getAllHotels , getHotelById , addHotel} from "../controllers/hotelController";
+import {getAllHotels , getHotelById , addHotel , deleteHotel} from "../controllers/hotelController";
 
 const router = Router();
 
 router.get("/", getAllHotels);
 router.get("/hotels/:id", getHotelById);
 router.post("/", protect, adminOnly, addHotel);
+router.delete("/:id", protect, adminOnly, deleteHotel);
+
 
 
 export default router;
