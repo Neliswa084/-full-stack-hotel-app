@@ -4,7 +4,7 @@ import {getAllHotels , getHotelById , addHotel} from "../controllers/hotelContro
 
 const router = Router();
 
-router.get("/hotels", getAllHotels);
+router.get("/", getAllHotels);
 router.get("/hotels/:id", getHotelById);
 router.post("/", protect, adminOnly, addHotel);
 
