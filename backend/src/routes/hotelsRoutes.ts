@@ -1,10 +1,12 @@
 import { Router } from "express";
-import {getAllHotels , getHotelById} from "../controllers/hotelController";
+import { protect, adminOnly } from "../middleware/authMiddleware";
+import {getAllHotels , getHotelById , addHotel} from "../controllers/hotelController";
 
 const router = Router();
 
 router.get("/hotels", getAllHotels);
 router.get("/hotels/:id", getHotelById);
+router.post("/", protect, adminOnly, addHotel);
 
 
 export default router;
