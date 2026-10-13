@@ -9,3 +9,5 @@ export interface Room {
     created_at: Date;
     updated_at: Date;
 }
+
+export type NewRoom = Omit<Room, 'id' | 'created_at' | 'updated_at'>;
