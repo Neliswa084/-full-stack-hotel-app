@@ -80,6 +80,9 @@ export const deleteRoom = async (req: Request, res: Response) => {
         res.status(200).json({message: "Room deleted"})
     }
     catch (error: any) {
+        if(error.code === "23503") {
+            return res.status(409).json({ message: "This room has bookings, cannot delete" });
+        }
       res.status(500).json({ message: "Failed to delete Room" });
     }
 }
