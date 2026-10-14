@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { protect, adminOnly } from "../middleware/authMiddleware";
 import {getAllHotels , getHotelById , addHotel , deleteHotel ,editHotel} from "../controllers/hotelController";
+import { getRoomsByHotel } from "../controllers/roomController";
 
 const router = Router();
 
@@ -10,6 +11,8 @@ router.post("/", protect, adminOnly, addHotel);
 router.delete("/:id", protect, adminOnly, deleteHotel);
 router.put("/:id", protect, adminOnly, editHotel);
 
+
+router.get("/:id/rooms", getRoomsByHotel);
 
 
 export default router;
