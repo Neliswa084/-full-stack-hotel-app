@@ -40,7 +40,7 @@ export const removeRoom = async (id: number): Promise<Room | null> => {
     return rows[0] || null;
 }
 
-export const updateRoom = async (id: number, room: NewRoom): Promise<Room | null> => {
+export const updateRoom = async (id: number, room: Omit<NewRoom, 'hotel_id'>): Promise<Room | null> => {
     const { rows } = await query(
         `UPDATE room_types SET
         name = $1, description = $2, capacity = $3, price_per_night = $4, total_rooms = $5,
