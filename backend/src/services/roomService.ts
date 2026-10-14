@@ -9,7 +9,7 @@ export const findAllRooms = async (): Promise<Room[]> => {
     return rows;
 };
 
-export const findRoomByHotelId = async (hotel_id: number): Promise<Room[]> => {
+export const findRoomsByHotelId = async (hotel_id: number): Promise<Room[]> => {
     const {rows} = await query(
         "SELECT * FROM room_types WHERE hotel_id = $1 ORDER BY id",
         [hotel_id]
