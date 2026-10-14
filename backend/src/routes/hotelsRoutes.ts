@@ -2,6 +2,7 @@ import { Router } from "express";
 import { protect, adminOnly } from "../middleware/authMiddleware";
 import {getAllHotels , getHotelById , addHotel , deleteHotel ,editHotel} from "../controllers/hotelController";
 import { addRoom, getRoomsByHotel } from "../controllers/roomController";
+import { getImagesByHotel, addImage } from "../controllers/hotelImagesController";
 
 const router = Router();
 
@@ -15,6 +16,13 @@ router.put("/:id", protect, adminOnly, editHotel);
 router.get("/:id/rooms", getRoomsByHotel);
 router.post("/:id/rooms" , protect ,adminOnly, addRoom)
 
+//Images 
+
+router.get("/:id/images", getImagesByHotel);
+router.post("/:id/images", protect, adminOnly, addImage);
+
 
 export default router;
     
+
+
