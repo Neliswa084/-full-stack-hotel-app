@@ -63,3 +63,25 @@ export const addRoom = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Failed to create room" });
     }
 };
+
+export const deleteRoom = async (req: Request, res: Response) => {
+    try{
+        const id = parseInt(String(req.params.id));
+
+        if (isNaN(id)){
+            return res.status(400).json({message: "Invalid room ID"});
+        }
+
+        const room = await roomsService.removeRoom(id);
+
+        if (!room) {
+            return res.status(404).json({message: "Room not found"})
+        }
+        res.status(200).json({message: "Room deleted"})
+    }
+    catch (error: any) {
+      res.status(500).json({ message: "Failed to delete Room" });
+    }
+}
+
+
