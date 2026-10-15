@@ -3,6 +3,7 @@ import { protect, adminOnly } from "../middleware/authMiddleware";
 import {getAllHotels , getHotelById , addHotel , deleteHotel ,editHotel} from "../controllers/hotelController";
 import { addRoom, getRoomsByHotel } from "../controllers/roomController";
 import { getImagesByHotel, addImage } from "../controllers/hotelImagesController";
+import { getHotelAmenities, updateHotelAmenities } from "../controllers/amenitiesController";
 
 const router = Router();
 
@@ -20,6 +21,12 @@ router.post("/:id/rooms" , protect ,adminOnly, addRoom)
 
 router.get("/:id/images", getImagesByHotel);
 router.post("/:id/images", protect, adminOnly, addImage);
+
+
+//Amenities
+
+router.get("/:id/amenities", getHotelAmenities);
+router.put("/:id/amenities", protect, adminOnly, updateHotelAmenities);
 
 
 export default router;

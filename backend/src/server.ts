@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes"
 import hotelsRoutes from "./routes/hotelsRoutes"
 import roomRoutes from "./routes/roomRoutes"
 import hotelImageRoutes from "./routes/hotelsImagesRoutes"
+import amenityRoutes from "./routes/amenitiesRoutes";
 
 
 
@@ -26,6 +27,7 @@ app.use(cors())
   app.use("/api/hotels", hotelsRoutes)
   app.use("/api/rooms", roomRoutes)
   app.use("/api/images", hotelImageRoutes);
+  app.use("/api/amenities", amenityRoutes);
 
 
   app.listen(PORT, () => {
