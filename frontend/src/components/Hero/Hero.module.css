@@ -1,7 +1,112 @@
-.hero-container{
-    width: 100%;
-    height: 40px;
+.hero {
+  position: relative;
+  height: 85vh;
+  min-height: 520px;
+  overflow: hidden;
 }
-.hero-image{
-    height: 40px
+
+/* The picture fills the whole section */
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark navy shade so the white text is easy to read */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(10, 26, 51, 0.85) 0%,
+    rgba(19, 41, 75, 0.55) 50%,
+    rgba(19, 41, 75, 0.1) 100%
+  );
+}
+
+/* The text sits on top of the picture */
+.content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: #fff;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 16px;
+  max-width: 600px;
+}
+
+.subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 0 32px;
+  opacity: 0.9;
+}
+
+.button {
+  background: #fff;
+  color: var(--navy);
+  border: none;
+  padding: 14px 32px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Phones */
+@media (max-width: 768px) {
+  .hero {
+    height: 75vh;
+    min-height: 460px;
+  }
+
+  .overlay {
+    background: rgba(10, 26, 51, 0.65);
+  }
+
+  .content {
+    padding: 0 20px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
 }
