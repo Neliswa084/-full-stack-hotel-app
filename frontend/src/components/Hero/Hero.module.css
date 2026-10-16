@@ -1,9 +1,8 @@
-/* Space around the card, like in the design */
 .wrapper {
   padding: 16px 24px 0;
 }
 
-/* The rounded navy card */
+
 .hero {
   position: relative;
   max-width: 1200px;
@@ -22,19 +21,18 @@
   object-fit: cover;
 }
 
-/* Navy shade over the photo so it matches the design colour */
 .overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(19, 41, 75, 0.92) 0%,
-    rgba(19, 41, 75, 0.75) 55%,
-    rgba(10, 26, 51, 0.85) 100%
+    rgba(22, 42, 71, 0.80) 0%,
+    rgba(19, 41, 75, 0.6) 55%,
+    rgba(10, 26, 51, 0.40) 100%
   );
 }
 
-/* Title at the top, search bar at the bottom */
+
 .content {
   position: relative;
   z-index: 1;
@@ -65,14 +63,14 @@
   opacity: 0.9;
 }
 
-/* Tablets */
+
 @media (max-width: 900px) {
   .title {
     font-size: 48px;
   }
 }
 
-/* Phones */
+
 @media (max-width: 600px) {
   .wrapper {
     padding: 12px 16px 0;

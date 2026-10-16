@@ -1,4 +1,4 @@
-import heroImage from '../../assets/hotelHeroImage.jpg'
+import heroImage from '../../assets/valeriia-bugaiova-_pPHgeHz1uk-unsplash.jpg'
 import { SearchBar } from '../SearchBar/SearchBar'
 import styles from './Hero.module.css'
 
@@ -15,7 +15,7 @@ export const Hero = () => {
               Cute stays,<br />smart prices
             </h1>
             <p className={styles.subtitle}>
-              Find cosy, budget-friendly hotels across South Africa — book in minutes
+              Find cosy, budget-friendly hotels across South Africa , book in minutes
               and save more for the fun part of your trip.
             </p>
           </div>
