@@ -1,27 +1,27 @@
-import { useNavigate } from 'react-router-dom'
 import heroImage from '../../assets/hotelHeroImage.jpg'
+import { SearchBar } from '../SearchBar/SearchBar'
 import styles from './Hero.module.css'
 
 export const Hero = () => {
-  const navigate = useNavigate()
-
   return (
-    <section className={styles.hero}>
-      <img className={styles.image} src={heroImage} alt="Hotel with a pool at sunset" />
+    <section className={styles.wrapper}>
+      <div className={styles.hero}>
+        <img className={styles.image} src={heroImage} alt="Hotel with a pool at dusk" />
+        <div className={styles.overlay}></div>
 
-      <div className={styles.overlay}></div>
+        <div className={styles.content}>
+          <div>
+            <h1 className={styles.title}>
+              Cute stays,<br />smart prices
+            </h1>
+            <p className={styles.subtitle}>
+              Find cosy, budget-friendly hotels across South Africa — book in minutes
+              and save more for the fun part of your trip.
+            </p>
+          </div>
 
-      <div className={styles.content}>
-        <span className={styles.badge}>Budget-friendly stays</span>
-        <h1 className={styles.title}>
-          Cosy hotels,<br />happy budgets
-        </h1>
-        <p className={styles.subtitle}>
-          Find clean, comfortable rooms across South Africa at prices that make sense.
-        </p>
-        <button className={styles.button} onClick={() => navigate('/hotels')}>
-          Explore hotels
-        </button>
+          <SearchBar />
+        </div>
       </div>
     </section>
   )

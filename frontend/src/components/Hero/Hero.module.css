@@ -1,11 +1,19 @@
-.hero {
-  position: relative;
-  height: 85vh;
-  min-height: 520px;
-  overflow: hidden;
+/* Space around the card, like in the design */
+.wrapper {
+  padding: 16px 24px 0;
 }
 
-/* The picture fills the whole section */
+/* The rounded navy card */
+.hero {
+  position: relative;
+  max-width: 1200px;
+  min-height: 560px;
+  margin: 0 auto;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--navy);
+}
+
 .image {
   position: absolute;
   inset: 0;
@@ -14,92 +22,69 @@
   object-fit: cover;
 }
 
-/* Dark navy shade so the white text is easy to read */
+/* Navy shade over the photo so it matches the design colour */
 .overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    90deg,
-    rgba(10, 26, 51, 0.85) 0%,
-    rgba(19, 41, 75, 0.55) 50%,
-    rgba(19, 41, 75, 0.1) 100%
+    180deg,
+    rgba(19, 41, 75, 0.92) 0%,
+    rgba(19, 41, 75, 0.75) 55%,
+    rgba(10, 26, 51, 0.85) 100%
   );
 }
 
-/* The text sits on top of the picture */
+/* Title at the top, search bar at the bottom */
 .content {
   position: relative;
   z-index: 1;
-  height: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 32px;
+  min-height: 560px;
+  padding: 56px 48px 40px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
   color: #fff;
-}
-
-.badge {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 13px;
-  letter-spacing: 0.5px;
-  margin-bottom: 20px;
 }
 
 .title {
   font-family: 'Montserrat', sans-serif;
-  font-size: 56px;
+  font-size: 64px;
   font-weight: 800;
-  line-height: 1.1;
-  margin: 0 0 16px;
-  max-width: 600px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 20px;
 }
 
 .subtitle {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.6;
-  max-width: 480px;
-  margin: 0 0 32px;
+  max-width: 460px;
+  margin: 0;
   opacity: 0.9;
 }
 
-.button {
-  background: #fff;
-  color: var(--navy);
-  border: none;
-  padding: 14px 32px;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+/* Tablets */
+@media (max-width: 900px) {
+  .title {
+    font-size: 48px;
+  }
 }
 
 /* Phones */
-@media (max-width: 768px) {
-  .hero {
-    height: 75vh;
-    min-height: 460px;
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 12px 16px 0;
   }
 
-  .overlay {
-    background: rgba(10, 26, 51, 0.65);
+  .hero,
+  .content {
+    min-height: auto;
   }
 
   .content {
-    padding: 0 20px;
-    align-items: center;
-    text-align: center;
+    padding: 36px 20px 20px;
   }
 
   .title {
@@ -107,6 +92,6 @@
   }
 
   .subtitle {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
