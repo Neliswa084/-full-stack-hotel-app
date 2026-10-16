@@ -1,23 +1,19 @@
-import React from 'react'
-import {useNavigate} from 'react-router-dom'
 import { NavBar } from '../components/NavBar/NavBar'
-import heroImage from '../assets/hotelHeroImage.jpg'
 import { Hero } from '../components/Hero/Hero'
+import { Footer } from '../components/Footer/Footer'
+import { WhyChooseUs } from '../components/WhyChooseUs/WhyChooseUs'
 
 
 
 export const LandingPage = () => {
 
-    const navigate = useNavigate()
-
-    const navigateToRegister = () => {
-        navigate('/register')
-    }
   return (
 <>
-    <NavBar />
+   -  <NavBar />
       <Hero />
-
+      <WhyChooseUs />
+      <Footer />
+ 
      </>
   )
 }

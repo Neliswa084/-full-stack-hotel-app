@@ -3,12 +3,31 @@ import { Hotel , NewHotel} from "../models/hotel.model";
 
 
 
-export const findAllHotels = async (): Promise<Hotel[]> => {
-    const {rows} = await query(
-        "SELECT * FROM hotels WHERE is_visible = true ORDER BY id"
+// export const findAllHotels = async (): Promise<Hotel[]> => {
+//     const {rows} = await query(
+//         "SELECT * FROM hotels WHERE is_visible = true ORDER BY id"
+//     );
+//     return rows
+// }
+export const findAllHotels = async () => {
+    const { rows } = await query(
+        `SELECT h.id, h.name, h.city, h.star_rating,
+            (SELECT image_url FROM hotel_images
+             WHERE hotel_id = h.id AND is_main_image = true LIMIT 1) AS main_image,
+            (SELECT MIN(price_per_night) FROM room_types
+             WHERE hotel_id = h.id) AS price_from,
+            (SELECT ROUND(AVG(rating), 1) FROM reviews
+             WHERE hotel_id = h.id) AS average_rating,
+            ARRAY(SELECT a.name FROM amenities a
+                  JOIN hotel_amenities ha ON ha.amenity_id = a.id
+                  WHERE ha.hotel_id = h.id
+                  ORDER BY a.name LIMIT 3) AS amenities
+         FROM hotels h
+         WHERE h.is_visible = true
+         ORDER BY h.id`
     );
-    return rows
-}
+    return rows;
+};
 
 export const findHotelById = async (id: number): Promise<Hotel | null> => {
     const {rows} = await query(
