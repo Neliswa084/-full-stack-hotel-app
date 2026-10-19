@@ -4,6 +4,7 @@ import {getAllHotels , getHotelById , addHotel , deleteHotel ,editHotel} from ".
 import { addRoom, getRoomsByHotel } from "../controllers/roomController";
 import { getImagesByHotel, addImage } from "../controllers/hotelImagesController";
 import { getHotelAmenities, updateHotelAmenities } from "../controllers/amenitiesController";
+import { getHotelReviews, addReview } from "../controllers/reviewsController";
 
 const router = Router();
 
@@ -27,6 +28,11 @@ router.post("/:id/images", protect, adminOnly, addImage);
 
 router.get("/:id/amenities", getHotelAmenities);
 router.put("/:id/amenities", protect, adminOnly, updateHotelAmenities);
+
+//Reviews
+
+router.get("/:id/reviews", getHotelReviews);
+router.post("/:id/reviews", protect, addReview);
 
 
 export default router;
