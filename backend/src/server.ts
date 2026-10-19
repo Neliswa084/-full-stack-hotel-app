@@ -10,6 +10,7 @@ import hotelImageRoutes from "./routes/hotelsImagesRoutes"
 import amenityRoutes from "./routes/amenitiesRoutes";
 import bookingRoutes from "./routes/bookingRoutes";
 import reviewsRoutes from "./routes/reviewsRoutes";
+import favouriteRoutes from "./routes/favouriteRoutes"
 
 
 
@@ -32,6 +33,7 @@ app.use(cors())
   app.use("/api/amenities", amenityRoutes);
   app.use("/api/bookings", bookingRoutes);
   app.use("/api/reviews", reviewsRoutes);
+  app.use("/api/favourites", favouriteRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
