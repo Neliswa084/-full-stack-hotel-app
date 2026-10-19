@@ -22,11 +22,12 @@ export const fetchHotels = createAsyncThunk(
         try {
             const response = await axios.get(`/api/hotels`)
             return response.data
-        } catch (error : any) {
-            return thunkAPI.rejectWithValue(error.message || 'Failed to fetch hotels')
-        }
+        } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message || 'Failed to fetch hotels'
+    )
     }
-)
+})
 
 export const hotelSlice = createSlice({
     name: 'hotels',
