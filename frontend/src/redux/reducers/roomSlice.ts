@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { getConfig } from '../../utils/getConfig'
+import type { Room } from '../../types/hotel';
 
 export interface RoomsState {
-    rooms: any[];
+    rooms: Room[];
     loading: boolean;
     error: string | null;
 }
