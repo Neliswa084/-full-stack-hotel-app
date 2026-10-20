@@ -94,7 +94,7 @@ export const AdminHotels = () => {
                             <tr key={hotel.id}>
                                 <td>{hotel.name}</td>
                                 <td>{hotel.city}</td>
-                                <td>{hotel.star_rating} ★</td>
+                                <td>{hotel.star_rating}</td>
                                 <td>{hotel.is_visible ? 'Visible' : 'Hidden'}</td>
                                 <td>
                                     <button className={styles.editButton} onClick={() => navigate(`/admin/hotels/${hotel.id}`)}>
