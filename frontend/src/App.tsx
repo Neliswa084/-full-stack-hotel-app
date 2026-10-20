@@ -7,6 +7,7 @@ import { HomePage } from './pages/HomePage'
 import { AdminLayout } from './components/Admin/AdminLayout'
 import { AdminPage } from './pages/AdminPage'
 import { AdminHotelsPage } from './pages/AdminHotelsPage'
+import {AdminManageHotelPage} from './pages/AdminManageHotelPage'
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />
-         <Route path="hotels" element={<AdminHotelsPage />} />
+        <Route path="hotels" element={<AdminHotelsPage />} />
+        <Route path="hotels/:id" element={<AdminManageHotelPage />} />
       </Route>
 
     </Routes>
