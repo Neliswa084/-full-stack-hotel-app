@@ -4,23 +4,24 @@ import { LandingPage } from './pages/LandingPage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { HomePage } from './pages/HomePage'
+import { AdminLayout } from './components/Admin/AdminLayout'
 import { AdminPage } from './pages/AdminPage'
+import { AdminHotelsPage } from './pages/AdminHotelsPage'
 
 function App() {
-
-
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/home" element={<HomePage />} />
 
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/admin" element={<AdminPage />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminPage />} />
+         <Route path="hotels" element={<AdminHotelsPage />} />
+      </Route>
 
-      </Routes>
-    </>
+    </Routes>
   )
 }
 
