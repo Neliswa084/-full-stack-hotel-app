@@ -18,3 +18,25 @@ export interface Hotel {
   star_rating: number;
   is_visible: boolean;
 }
+export interface Room {
+  id: number;
+  hotel_id: number;
+  name: string;
+  description: string | null;
+  capacity: number;
+  price_per_night: string;
+  total_rooms: number;
+}
+
+export interface Photo {
+  id: number;
+  hotel_id: number;
+  image_url: string;
+  is_main_image: boolean;
+  display_order: number;
+}
+
+export interface Amenity {
+  id: number;
+  name: string;
+}
