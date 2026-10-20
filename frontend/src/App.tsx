@@ -6,6 +6,7 @@ import { RegisterPage } from './pages/RegisterPage'
 import { HomePage } from './pages/HomePage'
 import { AdminLayout } from './components/Admin/AdminLayout'
 import { AdminPage } from './pages/AdminPage'
+import { AdminHotelsPage } from './pages/AdminHotelsPage'
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />
+         <Route path="hotels" element={<AdminHotelsPage />} />
       </Route>
+
     </Routes>
   )
 }
