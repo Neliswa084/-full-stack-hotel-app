@@ -11,3 +11,7 @@ export const getStats = async () => {
         bookings: Number(bookings.rows[0].count)
     };
 };
+export const getAllHotels = async () => {
+    const { rows } = await query("SELECT * FROM hotels ORDER BY id");
+    return rows;
+};
