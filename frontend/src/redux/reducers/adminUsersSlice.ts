@@ -21,7 +21,7 @@ export const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get(`/api/admin/users`)
+            const response = await axios.get(`/api/admin/users` , getConfig())
             return response.data
         }
         catch (error: any) {
