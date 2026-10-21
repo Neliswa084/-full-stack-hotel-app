@@ -21,7 +21,24 @@ export const createUser = async (
   return rows[0];
 };
 
+export const getAllUsers = async () => {
+    const { rows } = await query(
+        `SELECT id, first_name, last_name, email, phone_number, role, account_status, created_at
+         FROM users
+         ORDER BY id`
+    );
+    return rows;
+};
 
+export const updateUserStatus = async (id: number, status: string) => {
+    const { rows } = await query(
+        `UPDATE users SET account_status = $1, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $2
+         RETURNING id, first_name, last_name, email, account_status`,
+        [status, id]
+    );
+    return rows[0] || null;
+};
 
 
 
