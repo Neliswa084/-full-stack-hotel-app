@@ -35,7 +35,6 @@ export const HotelDetails = () => {
       <h1 className={styles.name}>{selectedHotel.name}</h1>
       <p className={styles.location}>
         {selectedHotel.address}, {selectedHotel.city} · {selectedHotel.star_rating} ⭐
-        {selectedHotel.address}, {selectedHotel.city} · {selectedHotel.star_rating}
       </p>
 
       {photos.length > 0 ? (
