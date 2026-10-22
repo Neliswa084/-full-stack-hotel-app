@@ -234,6 +234,18 @@
 .policy:last-child {
   border-bottom: none;
 }
+.mapAddress {
+  color: var(--text-soft);
+  margin: 0 0 12px;
+}
+
+.map {
+  width: 100%;
+  height: 320px;
+  border: none;
+  border-radius: 14px;
+}
+
 @media (max-width: 600px) {
   .roomCard {
     flex-direction: column;

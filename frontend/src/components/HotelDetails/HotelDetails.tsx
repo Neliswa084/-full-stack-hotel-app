@@ -30,6 +30,7 @@ export const HotelDetails = () => {
   if (loading) return <p className={styles.message}>Loading...</p>
   if (error) return <p className={styles.message}>{error}</p>
   if (!selectedHotel) return null
+  const mapAddress = encodeURIComponent(`${selectedHotel.address}, ${selectedHotel.city}`)
 
   return (
     <div className={styles.page}>
@@ -111,6 +112,17 @@ export const HotelDetails = () => {
       ))}
     </div>
   )}
+</section>
+<section className={styles.section}>
+  <h2 className={styles.sectionTitle}>Location</h2>
+  <p className={styles.mapAddress}>{selectedHotel.address}, {selectedHotel.city}</p>
+
+  <iframe
+    title="Hotel location"
+    className={styles.map}
+    src={`https://www.google.com/maps?q=${mapAddress}&output=embed`}
+    loading="lazy"
+  ></iframe>
 </section>
       </section>
       <section className={styles.section}>
