@@ -1,19 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import type {HotelCardData} from '../../types/hotel'
+import type {HotelCardData ,Hotel } from '../../types/hotel'
 
 
 export interface HotelState {
     hotels: HotelCardData[];
+    selectedHotel: Hotel | null;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: HotelState = {
     hotels: [],
+    selectedHotel: null,
     loading: false,
     error: null,
 }
+
 
 
 export const fetchHotels = createAsyncThunk(
