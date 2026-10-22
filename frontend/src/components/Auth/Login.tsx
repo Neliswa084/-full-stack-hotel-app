@@ -38,17 +38,17 @@ export const Login = () => {
         <aside className={styles.brandPanel}>
           <Link to="/" className={styles.brand}>BUDGIE STAYS</Link>
           <div>
-            <h2 className={styles.brandTitle}>Cute Stays, Smart Prices</h2>
-            <ul className={styles.perks}>
+            {/* <h2 className={styles.brandTitle}>Cute Stays, Smart Prices</h2>
+            {/* <ul className={styles.perks}>
               <li>Save the little hotels you love</li>
               <li>Book in minutes</li>
-            </ul>
+            </ul> */} 
           </div>
         </aside>
 
         <div className={styles.formPanel}>
           <form className={styles.form} onSubmit={handleSubmit}>
-            <Link to="/" className={styles.back}>← Back to home</Link>
+            <Link to="/" className={styles.back}>Back to home</Link>
             <h1 className={styles.title}>Welcome back</h1>
             <p className={styles.subtitle}>Sign in to book hotels and see your favourites</p>
 

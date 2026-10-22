@@ -98,6 +98,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 .modal h2 {
@@ -137,4 +139,11 @@
   justify-content: flex-end;
   gap: 10px;
   margin-top: 12px;
+}
+.detail {
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.5;
 }

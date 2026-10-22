@@ -22,7 +22,7 @@ export const FeaturedHotels = () => {
       <p className={styles.subheading}>
         Cosy little hotels our guests love , at prices you'll love too
       </p>
-      <Link to="/hotels" className={styles.viewAll}>View all hotels →</Link>
+      <Link to="/hotels" className={styles.viewAll}>View all hotels</Link>
 
       {loading && <p className={styles.message}>Loading hotels...</p>}
 

@@ -45,7 +45,7 @@ export const Register = () => {
 
         <div className={styles.formPanel}>
           <form className={styles.form} onSubmit={handleSubmit}>
-            <Link to="/" className={styles.back}>← Back to home</Link>
+            <Link to="/" className={styles.back}>Back to home</Link>
             <h1 className={styles.title}>Create your account</h1>
             <p className={styles.subtitle}>It's free and only takes a minute.</p>
 
