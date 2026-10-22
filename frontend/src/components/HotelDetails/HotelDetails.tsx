@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import { fetchPhotos } from '../../redux/reducers/photosSlice'
 import { fetchRooms } from '../../redux/reducers/roomsSlice'
 import { fetchHotelAmenities } from '../../redux/reducers/amenitiesSlice'
+import { fetchReviews } from '../../redux/reducers/reviewsSlice'
 
 export const HotelDetails = () => {
   const { id } = useParams()
@@ -17,6 +18,8 @@ export const HotelDetails = () => {
   const { photos } = useSelector((state: RootState) => state.photos)
   const { rooms } = useSelector((state: RootState) => state.rooms)
   const { hotelAmenities } = useSelector((state: RootState) => state.amenities)
+  const { reviews, average, total } = useSelector((state: RootState) => state.reviews)
+
   const [activePhoto, setActivePhoto] = useState(0)
 
   useEffect(() => {
@@ -24,6 +27,7 @@ export const HotelDetails = () => {
     dispatch(fetchPhotos(id!))
     dispatch(fetchRooms(id!))
     dispatch(fetchHotelAmenities(id!))
+    dispatch(fetchReviews(id!))
     setActivePhoto(0)
   }, [dispatch, id])
 
@@ -158,6 +162,34 @@ export const HotelDetails = () => {
       </p>
     )}
   </div>
+</section>
+<section className={styles.section}>
+  <h2 className={styles.sectionTitle}>Reviews</h2>
+
+  {total === 0 ? (
+    <p className={styles.empty}>No reviews yet.</p>
+  ) : (
+    <>
+      <p className={styles.average}>
+        ★ {average} <span>({total} {total === 1 ? 'review' : 'reviews'})</span>
+      </p>
+
+      <div className={styles.reviewList}>
+        {reviews.map((review) => (
+          <div key={review.id} className={styles.reviewCard}>
+            <div className={styles.reviewTop}>
+              <strong>{review.reviewer}</strong>
+              <span className={styles.reviewStars}>{'★'.repeat(review.rating)}</span>
+            </div>
+            {review.comment && <p className={styles.reviewComment}>{review.comment}</p>}
+            <p className={styles.reviewDate}>
+              {new Date(review.created_at).toLocaleDateString('en-ZA')}
+            </p>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
 </section>
     </div>
   )
