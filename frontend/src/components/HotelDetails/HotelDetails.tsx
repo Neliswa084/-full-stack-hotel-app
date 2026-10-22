@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '../../redux/store'
 import { fetchHotelById } from '../../redux/reducers/hotelSlice'
 import styles from './HotelDetails.module.css'
+import { ArrowLeft } from 'lucide-react';
 
 export const HotelDetails = () => {
   const { id } = useParams()
@@ -20,11 +21,14 @@ export const HotelDetails = () => {
 
   return (
     <div className={styles.page}>
-      <Link to="/" className={styles.back}>← Back to hotels</Link>
+   <Link to="/" className={styles.back}>
+      <ArrowLeft size={18} className={styles.icon} aria-hidden="true" />
+         Back to hotels
+    </Link>
 
       <h1 className={styles.name}>{selectedHotel.name}</h1>
       <p className={styles.location}>
-        {selectedHotel.address}, {selectedHotel.city} · {selectedHotel.star_rating} 
+        {selectedHotel.address}, {selectedHotel.city} · {selectedHotel.star_rating} ⭐
       </p>
 
       <section className={styles.section}>
