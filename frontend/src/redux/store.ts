@@ -8,7 +8,8 @@ import roomsReducer from './reducers/roomsSlice';
 import photosReducer from './reducers/photosSlice';
 import amenitiesReducer from './reducers/amenitiesSlice';
 import usersReducer from './reducers/adminUsersSlice';
-import bookingsReducer from './reducers/adminBookingsSlice'
+import bookingsReducer from './reducers/adminBookingsSlice';
+import reviewsReducer from './reducers/reviewsSlice'
 
 const store = configureStore ({
     reducer : {
@@ -21,7 +22,8 @@ const store = configureStore ({
         photos: photosReducer,
         amenities: amenitiesReducer,
         users: usersReducer,
-        bookings: bookingsReducer
+        bookings: bookingsReducer,
+        reviews: reviewsReducer
     }
 })
 
