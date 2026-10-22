@@ -40,6 +40,16 @@ export const ManageAmenities = ({ hotelId }: { hotelId: string }) => {
   const handleSave = () => {
     dispatch(saveHotelAmenities({ hotelId, amenityIds: selectedIds }))
   }
+  const handleAddAmenity = async (e: React.FormEvent) => {
+  e.preventDefault()
+
+  const result = await dispatch(createAmenity(newAmenity))
+
+  if (result.meta.requestStatus === 'fulfilled') {
+    setNewAmenity('')
+    dispatch(fetchAllAmenities())
+  }
+}
 
   return (
     <section className={styles.panel}>
