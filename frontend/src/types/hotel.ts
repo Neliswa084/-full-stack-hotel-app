@@ -16,6 +16,12 @@ export interface Hotel {
   address: string;
   city: string;
   star_rating: number;
+  check_in_time: string;
+  check_out_time: string;
+  cancellation_policy: string | null;
+  children_policy: string | null;
+  pet_policy: string | null;
+  smoking_policy: string | null;
   is_visible: boolean;
 }
 export interface Room {
