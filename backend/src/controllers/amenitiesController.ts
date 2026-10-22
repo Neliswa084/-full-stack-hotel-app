@@ -1,6 +1,25 @@
 import { Request, Response } from "express";
 import * as amenityService from "../services/amenitiesService";
 
+
+export const addAmenity = async (req: Request, res: Response) => {
+    try {
+        const { name } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({ message: "Amenity name is required" });
+        }
+
+        const amenity = await amenityService.createAmenity(name.trim());
+        res.status(201).json({ message: "Amenity added", amenity });
+    } catch (error: any) {
+        if (error.code === "23505") {
+            return res.status(409).json({ message: "This amenity already exists" });
+        }
+        res.status(500).json({ message: "Failed to add amenity" });
+    }
+};
+
 export const getAllAmenities = async (req: Request, res: Response) => {
     try {
         const amenities = await amenityService.findAllAmenities();
