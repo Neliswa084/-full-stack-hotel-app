@@ -1,6 +1,15 @@
 import { query } from "../config/database";
 import { Amenity } from "../models/amenitie.model";
 
+
+export const createAmenity = async (name: string): Promise<Amenity> => {
+    const { rows } = await query(
+        "INSERT INTO amenities (name) VALUES ($1) RETURNING *",
+        [name]
+    );
+    return rows[0];
+};
+
 export const findAllAmenities = async (): Promise<Amenity[]> => {
     const { rows } = await query(
         "SELECT * FROM amenities ORDER BY name"
