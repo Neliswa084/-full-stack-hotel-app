@@ -123,6 +123,7 @@ export const HotelDetails = () => {
     src={`https://www.google.com/maps?q=${mapAddress}&output=embed`}
     loading="lazy"
   ></iframe>
+  
 </section>
       </section>
       <section className={styles.section}>
