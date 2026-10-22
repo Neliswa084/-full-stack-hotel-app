@@ -14,18 +14,18 @@ import { useNavigate } from 'react-router-dom'
 
 
 const emptyHotel: Hotel = {
-  name: '',
-  description: '',
-  address: '',
-  city: '',
-  star_rating: 3,
-  check_in_time: '14:00',
-  check_out_time: '10:00',
-  cancellation_policy: '',
-  children_policy: '',
-  pet_policy: '',
-  smoking_policy: '',
-  is_visible: true,
+    name: '',
+    description: '',
+    address: '',
+    city: '',
+    star_rating: 3,
+    check_in_time: '14:00',
+    check_out_time: '10:00',
+    cancellation_policy: '',
+    children_policy: '',
+    pet_policy: '',
+    smoking_policy: '',
+    is_visible: true,
 }
 
 export const AdminHotels = () => {
@@ -141,6 +141,43 @@ export const AdminHotels = () => {
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+                        <label>Check-in time</label>
+                        <input type="time" name="check_in_time" value={form.check_in_time} onChange={handleChange} />
+
+                        <label>Check-out time</label>
+                        <input type="time" name="check_out_time" value={form.check_out_time} onChange={handleChange} />
+
+                        <label>Cancellation policy</label>
+                        <textarea
+                            name="cancellation_policy"
+                            placeholder="e.g. Free cancellation up to 48 hours before check-in"
+                            value={form.cancellation_policy || ''}
+                            onChange={handleChange}
+                        />
+
+                        <label>Children policy</label>
+                        <textarea
+                            name="children_policy"
+                            placeholder="e.g. Children of all ages are welcome"
+                            value={form.children_policy || ''}
+                            onChange={handleChange}
+                        />
+
+                        <label>Pet policy</label>
+                        <textarea
+                            name="pet_policy"
+                            placeholder="e.g. Pets are not allowed"
+                            value={form.pet_policy || ''}
+                            onChange={handleChange}
+                        />
+
+                        <label>Smoking policy</label>
+                        <textarea
+                            name="smoking_policy"
+                            placeholder="e.g. Smoking only in outdoor areas"
+                            value={form.smoking_policy || ''}
+                            onChange={handleChange}
+                        />
 
                         <label className={styles.checkboxRow}>
                             <input
