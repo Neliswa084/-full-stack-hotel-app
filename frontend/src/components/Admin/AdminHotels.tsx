@@ -14,12 +14,18 @@ import { useNavigate } from 'react-router-dom'
 
 
 const emptyHotel: Hotel = {
-    name: '',
-    description: '',
-    address: '',
-    city: '',
-    star_rating: 3,
-    is_visible: true,
+  name: '',
+  description: '',
+  address: '',
+  city: '',
+  star_rating: 3,
+  check_in_time: '14:00',
+  check_out_time: '10:00',
+  cancellation_policy: '',
+  children_policy: '',
+  pet_policy: '',
+  smoking_policy: '',
+  is_visible: true,
 }
 
 export const AdminHotels = () => {
