@@ -17,6 +17,17 @@ const initialState: AmenitiesState = {
     saved: false,
 }
 
+export const createAmenity = createAsyncThunk(
+    'amenities/createAmenity',
+    async (name: string, thunkAPI) => {
+        try {
+            const response = await axios.post('/api/amenities', { name }, getConfig())
+            return response.data
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to add amenity')
+        }
+    }
+)
 export const fetchAllAmenities = createAsyncThunk(
     'amenities/fetchAllAmenities',
     async (_, thunkAPI) => {
@@ -79,6 +90,12 @@ export const amenitiesSlice = createSlice({
                 state.saved = true
             })
             .addCase(saveHotelAmenities.rejected, (state, action) => {
+                state.error = action.payload as string
+            })
+            .addCase(createAmenity.pending, (state) => {
+                state.error = null
+            })
+            .addCase(createAmenity.rejected, (state, action) => {
                 state.error = action.payload as string
             })
     },
