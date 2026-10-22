@@ -6,6 +6,7 @@ import { fetchHotelById } from '../../redux/reducers/hotelSlice'
 import styles from './HotelDetails.module.css'
 import { ArrowLeft } from 'lucide-react';
 import { fetchPhotos } from '../../redux/reducers/photosSlice'
+import { fetchRooms } from '../../redux/reducers/roomsSlice'
 
 export const HotelDetails = () => {
   const { id } = useParams()
@@ -13,11 +14,13 @@ export const HotelDetails = () => {
   const { selectedHotel, loading, error } = useSelector((state: RootState) => state.hotels)
 
   const { photos } = useSelector((state: RootState) => state.photos)
+  const { rooms } = useSelector((state: RootState) => state.rooms)
   const [activePhoto, setActivePhoto] = useState(0)
 
   useEffect(() => {
     dispatch(fetchHotelById(id!))
     dispatch(fetchPhotos(id!))
+    dispatch(fetchRooms(id!))
     setActivePhoto(0)
   }, [dispatch, id])
 
