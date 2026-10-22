@@ -35,6 +35,7 @@ export const AdminHotels = () => {
 
     const [showModal, setShowModal] = useState(false)
     const [form, setForm] = useState<Hotel>(emptyHotel)
+    const [viewHotel, setViewHotel] = useState<Hotel | null>(null)
 
     useEffect(() => {
         dispatch(fetchAdminHotels())
@@ -103,6 +104,7 @@ export const AdminHotels = () => {
                                 <td>{hotel.star_rating}</td>
                                 <td>{hotel.is_visible ? 'Visible' : 'Hidden'}</td>
                                 <td>
+                                    <button className={styles.editButton} onClick={() => setViewHotel(hotel)}>View</button>
                                     <button className={styles.editButton} onClick={() => navigate(`/admin/hotels/${hotel.id}`)}>
                                         Manage
                                     </button>
@@ -197,6 +199,29 @@ export const AdminHotels = () => {
                             </button>
                         </div>
                     </form>
+                </div>
+            )}
+            {viewHotel && (
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+                        <h2>{viewHotel.name}</h2>
+
+                        <p className={styles.detail}><strong>Address:</strong> {viewHotel.address}</p>
+                        <p className={styles.detail}><strong>City:</strong> {viewHotel.city}</p>
+                        <p className={styles.detail}><strong>Stars:</strong> {viewHotel.star_rating} ★</p>
+                        <p className={styles.detail}><strong>Status:</strong> {viewHotel.is_visible ? 'Visible' : 'Hidden'}</p>
+                        <p className={styles.detail}><strong>Check-in:</strong> {viewHotel.check_in_time}</p>
+                        <p className={styles.detail}><strong>Check-out:</strong> {viewHotel.check_out_time}</p>
+                        <p className={styles.detail}><strong>Description:</strong> {viewHotel.description || '-'}</p>
+                        <p className={styles.detail}><strong>Cancellation policy:</strong> {viewHotel.cancellation_policy || '-'}</p>
+                        <p className={styles.detail}><strong>Children policy:</strong> {viewHotel.children_policy || '-'}</p>
+                        <p className={styles.detail}><strong>Pet policy:</strong> {viewHotel.pet_policy || '-'}</p>
+                        <p className={styles.detail}><strong>Smoking policy:</strong> {viewHotel.smoking_policy || '-'}</p>
+
+                        <div className={styles.modalButtons}>
+                            <button className={styles.cancelButton} onClick={() => setViewHotel(null)}>Close</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
