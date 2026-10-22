@@ -200,7 +200,40 @@
 .empty {
   color: var(--text-muted);
 }
+/* Amenities */
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
+.amenity {
+  background: var(--bg);
+  color: var(--navy);
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+/* Policies */
+.policies {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 8px 20px;
+}
+
+.policy {
+  margin: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.policy:last-child {
+  border-bottom: none;
+}
 @media (max-width: 600px) {
   .roomCard {
     flex-direction: column;

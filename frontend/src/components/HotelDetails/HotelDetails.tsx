@@ -74,6 +74,21 @@ export const HotelDetails = () => {
           {selectedHotel.description || 'No description yet.'}
         </p>
         <section className={styles.section}>
+  <h2 className={styles.sectionTitle}>Amenities</h2>
+
+  {hotelAmenities.length === 0 ? (
+    <p className={styles.empty}>No amenities listed yet.</p>
+  ) : (
+    <div className={styles.amenities}>
+      {hotelAmenities.map((amenity) => (
+        <span key={amenity.id} className={styles.amenity}>
+          ✓ {amenity.name}
+        </span>
+      ))}
+    </div>
+  )}
+</section>
+        <section className={styles.section}>
   <h2 className={styles.sectionTitle}>Rooms</h2>
 
   {rooms.length === 0 ? (
@@ -98,6 +113,39 @@ export const HotelDetails = () => {
   )}
 </section>
       </section>
+      <section className={styles.section}>
+  <h2 className={styles.sectionTitle}>Hotel policies</h2>
+
+  <div className={styles.policies}>
+    <p className={styles.policy}>
+      <strong>Check-in:</strong> from {selectedHotel.check_in_time.slice(0, 5)}
+    </p>
+    <p className={styles.policy}>
+      <strong>Check-out:</strong> by {selectedHotel.check_out_time.slice(0, 5)}
+    </p>
+
+    {selectedHotel.cancellation_policy && (
+      <p className={styles.policy}>
+        <strong>Cancellation:</strong> {selectedHotel.cancellation_policy}
+      </p>
+    )}
+    {selectedHotel.children_policy && (
+      <p className={styles.policy}>
+        <strong>Children:</strong> {selectedHotel.children_policy}
+      </p>
+    )}
+    {selectedHotel.pet_policy && (
+      <p className={styles.policy}>
+        <strong>Pets:</strong> {selectedHotel.pet_policy}
+      </p>
+    )}
+    {selectedHotel.smoking_policy && (
+      <p className={styles.policy}>
+        <strong>Smoking:</strong> {selectedHotel.smoking_policy}
+      </p>
+    )}
+  </div>
+</section>
     </div>
   )
 }
