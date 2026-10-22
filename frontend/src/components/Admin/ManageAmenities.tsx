@@ -54,6 +54,15 @@ export const ManageAmenities = ({ hotelId }: { hotelId: string }) => {
   return (
     <section className={styles.panel}>
       <h2 className={styles.panelTitle}>Amenities</h2>
+      <form className={styles.form} onSubmit={handleAddAmenity}>
+  <input
+    placeholder="New amenity e.g. Spa"
+    value={newAmenity}
+    onChange={(e) => setNewAmenity(e.target.value)}
+    required
+  />
+  <button type="submit" className={styles.lightButton}>Add new amenity</button>
+</form>
 
       {error && <p className={styles.error}>{error}</p>}
 
