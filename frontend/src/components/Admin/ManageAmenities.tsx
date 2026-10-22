@@ -5,6 +5,7 @@ import {
   fetchAllAmenities,
   fetchHotelAmenities,
   saveHotelAmenities,
+  createAmenity,
 } from '../../redux/reducers/amenitiesSlice'
 import styles from './ManageHotel.module.css'
 
@@ -15,6 +16,7 @@ export const ManageAmenities = ({ hotelId }: { hotelId: string }) => {
   )
 
   const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [newAmenity, setNewAmenity] = useState('')
 
   // Load all amenities and this hotel's amenities
   useEffect(() => {
