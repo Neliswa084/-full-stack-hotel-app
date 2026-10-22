@@ -70,6 +70,30 @@ export const HotelDetails = () => {
         <p className={styles.description}>
           {selectedHotel.description || 'No description yet.'}
         </p>
+        <section className={styles.section}>
+  <h2 className={styles.sectionTitle}>Rooms</h2>
+
+  {rooms.length === 0 ? (
+    <p className={styles.empty}>No rooms available yet.</p>
+  ) : (
+    <div className={styles.roomList}>
+      {rooms.map((room) => (
+        <div key={room.id} className={styles.roomCard}>
+          <div>
+            <h3 className={styles.roomName}>{room.name}</h3>
+            {room.description && <p className={styles.roomDescription}>{room.description}</p>}
+            <p className={styles.roomGuests}>Sleeps {room.capacity}</p>
+          </div>
+
+          <p className={styles.roomPrice}>
+            R {Number(room.price_per_night).toLocaleString('en-ZA')}
+            <span> / night</span>
+          </p>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
       </section>
     </div>
   )
