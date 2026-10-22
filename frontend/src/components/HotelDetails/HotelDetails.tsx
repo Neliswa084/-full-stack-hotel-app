@@ -83,7 +83,7 @@ export const HotelDetails = () => {
     <div className={styles.amenities}>
       {hotelAmenities.map((amenity) => (
         <span key={amenity.id} className={styles.amenity}>
-          ✓ {amenity.name}
+          {amenity.name}
         </span>
       ))}
     </div>
