@@ -10,6 +10,7 @@ import { AdminHotelsPage } from './pages/AdminHotelsPage'
 import {AdminManageHotelPage} from './pages/AdminManageHotelPage'
 import { AdminUsersPage } from './pages/AdminUsersPage'
 import {AdminBookingsPage } from './pages/AdminBookingsPage'
+import {HotelDetailsPage} from './pages/HotelDetailsPage'
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
         <Route path="users" element= {<AdminUsersPage />} />
         <Route path="bookings" element= {<AdminBookingsPage />} />
       </Route>
+      
+        <Route path="hotels/:id" element={<HotelDetailsPage />} />
+      
 
     </Routes>
   )
