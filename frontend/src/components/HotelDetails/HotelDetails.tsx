@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '../../redux/store'
 import { fetchHotelById } from '../../redux/reducers/hotelSlice'
@@ -29,6 +29,17 @@ export const HotelDetails = () => {
 
   const [activePhoto, setActivePhoto] = useState(0)
 
+  const navigate = useNavigate()
+  const today = new Date().toISOString().slice(0, 10)
+
+  const [roomId, setRoomId] = useState('')
+  const [checkIn, setCheckIn] = useState('')
+  const [checkOut, setCheckOut] = useState('')
+  const [adults, setAdults] = useState(2)
+  const [children, setChildren] = useState(0)
+  const [numberOfRooms, setNumberOfRooms] = useState(1)
+  const [bookingError, setBookingError] = useState('')
+
   useEffect(() => {
     dispatch(fetchHotelById(id!))
     dispatch(fetchPhotos(id!))
@@ -39,21 +50,66 @@ export const HotelDetails = () => {
   }, [dispatch, id])
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
+    e.preventDefault()
 
-  const result = await dispatch(addReview({ hotelId: id!, rating: Number(rating), comment }))
+    const result = await dispatch(addReview({ hotelId: id!, rating: Number(rating), comment }))
 
-  if (result.meta.requestStatus === 'fulfilled') {
-    setRating('5')
-    setComment('')
-    dispatch(fetchReviews(id!))
+    if (result.meta.requestStatus === 'fulfilled') {
+      setRating('5')
+      setComment('')
+      dispatch(fetchReviews(id!))
+    }
   }
-}
   if (loading) return <p className={styles.message}>Loading...</p>
   if (error) return <p className={styles.message}>{error}</p>
   if (!selectedHotel) return null
 
   const alreadyReviewed = reviews.some((review) => review.user_id === currentUser?.id)
+
+  // Price calculation
+  const selectedRoom = rooms.find((room) => room.id === Number(roomId))
+
+  let nights = 0
+  if (checkIn && checkOut) {
+    nights = Math.round((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))
+  }
+
+  let totalPrice = 0
+  if (selectedRoom && nights > 0) {
+    totalPrice = Number(selectedRoom.price_per_night) * nights * numberOfRooms
+  }
+  const handleBook = () => {
+    setBookingError('')
+
+    if (!currentUser) {
+      navigate('/login')
+      return
+    }
+    if (!selectedRoom) {
+      setBookingError('Please choose a room')
+      return
+    }
+    if (!checkIn || !checkOut || nights < 1) {
+      setBookingError('Please choose valid check-in and check-out dates')
+      return
+    }
+
+    navigate('/checkout', {
+      state: {
+        hotelName: selectedHotel.name,
+        roomId: selectedRoom.id,
+        roomName: selectedRoom.name,
+        pricePerNight: Number(selectedRoom.price_per_night),
+        checkIn,
+        checkOut,
+        nights,
+        adults,
+        children,
+        numberOfRooms,
+        total: totalPrice,
+      },
+    })
+  }
 
   const mapAddress = encodeURIComponent(`${selectedHotel.address}, ${selectedHotel.city}`)
 
@@ -138,6 +194,91 @@ export const HotelDetails = () => {
             </div>
           )}
         </section>
+
+        <section className={styles.bookingBox}>
+          <h2 className={styles.sectionTitle}>Book your stay</h2>
+
+          {bookingError && <p className={styles.reviewError}>{bookingError}</p>}
+
+          <label className={styles.formLabel}>Room</label>
+          <select className={styles.formInput} value={roomId} onChange={(e) => setRoomId(e.target.value)}>
+            <option value="">Choose a room</option>
+            {rooms.map((room) => (
+              <option key={room.id} value={room.id}>
+                {room.name} — R {room.price_per_night} / night
+              </option>
+            ))}
+          </select>
+
+          <div className={styles.bookingRow}>
+            <div>
+              <label className={styles.formLabel}>Check-in</label>
+              <input
+                type="date"
+                className={styles.formInput}
+                min={today}
+                value={checkIn}
+                onChange={(e) => setCheckIn(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className={styles.formLabel}>Check-out</label>
+              <input
+                type="date"
+                className={styles.formInput}
+                min={checkIn || today}
+                value={checkOut}
+                onChange={(e) => setCheckOut(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className={styles.bookingRow}>
+            <div>
+              <label className={styles.formLabel}>Adults</label>
+              <input
+                type="number"
+                className={styles.formInput}
+                min="1"
+                value={adults}
+                onChange={(e) => setAdults(Number(e.target.value))}
+              />
+            </div>
+            <div>
+              <label className={styles.formLabel}>Children</label>
+              <input
+                type="number"
+                className={styles.formInput}
+                min="0"
+                value={children}
+                onChange={(e) => setChildren(Number(e.target.value))}
+              />
+            </div>
+            <div>
+              <label className={styles.formLabel}>Rooms</label>
+              <input
+                type="number"
+                className={styles.formInput}
+                min="1"
+                value={numberOfRooms}
+                onChange={(e) => setNumberOfRooms(Number(e.target.value))}
+              />
+            </div>
+          </div>
+
+          {totalPrice > 0 && selectedRoom && (
+            <p className={styles.totalLine}>
+              {nights} {nights === 1 ? 'night' : 'nights'} × R {selectedRoom.price_per_night}
+              {numberOfRooms > 1 && ` × ${numberOfRooms} rooms`}
+              <strong> = R {totalPrice.toLocaleString('en-ZA')}</strong>
+            </p>
+          )}
+
+          <button className={styles.submitButton} onClick={handleBook}>
+            {currentUser ? 'Book now' : 'Log in to book'}
+          </button>
+        </section>
+
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Location</h2>
           <p className={styles.mapAddress}>{selectedHotel.address}, {selectedHotel.city}</p>
@@ -212,39 +353,39 @@ export const HotelDetails = () => {
           </>
         )}
         <div className={styles.reviewForm}>
-  {!currentUser ? (
-    <p>
-      <Link to="/login" className={styles.back}>Log in</Link> to write a review.
-    </p>
-  ) : alreadyReviewed ? (
-    <p className={styles.thanks}>Thanks for your review!</p>
-  ) : (
-    <form onSubmit={handleReviewSubmit}>
-      <h3 className={styles.formTitle}>Write a review</h3>
+          {!currentUser ? (
+            <p>
+              <Link to="/login" className={styles.back}>Log in</Link> to write a review.
+            </p>
+          ) : alreadyReviewed ? (
+            <p className={styles.thanks}>Thanks for your review!</p>
+          ) : (
+            <form onSubmit={handleReviewSubmit}>
+              <h3 className={styles.formTitle}>Write a review</h3>
 
-      {reviewError && <p className={styles.reviewError}>{reviewError}</p>}
+              {reviewError && <p className={styles.reviewError}>{reviewError}</p>}
 
-      <label className={styles.formLabel}>Rating</label>
-      <select className={styles.formInput} value={rating} onChange={(e) => setRating(e.target.value)}>
-        <option value="5">★★★★★ Excellent</option>
-        <option value="4">★★★★ Good</option>
-        <option value="3">★★★ Okay</option>
-        <option value="2">★★ Poor</option>
-        <option value="1">★ Bad</option>
-      </select>
+              <label className={styles.formLabel}>Rating</label>
+              <select className={styles.formInput} value={rating} onChange={(e) => setRating(e.target.value)}>
+                <option value="5">★★★★★ Excellent</option>
+                <option value="4">★★★★ Good</option>
+                <option value="3">★★★ Okay</option>
+                <option value="2">★★ Poor</option>
+                <option value="1">★ Bad</option>
+              </select>
 
-      <label className={styles.formLabel}>Comment</label>
-      <textarea
-        className={styles.formInput}
-        placeholder="Tell other guests about your stay"
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-      />
+              <label className={styles.formLabel}>Comment</label>
+              <textarea
+                className={styles.formInput}
+                placeholder="Tell other guests about your stay"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
 
-      <button type="submit" className={styles.submitButton}>Submit review</button>
-    </form>
-  )}
-</div>
+              <button type="submit" className={styles.submitButton}>Submit review</button>
+            </form>
+          )}
+        </div>
       </section>
     </div>
   )

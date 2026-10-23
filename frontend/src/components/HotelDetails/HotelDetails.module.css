@@ -350,7 +350,30 @@ textarea.formInput {
   font-weight: 600;
   margin: 0;
 }
+.bookingBox {
+  background: #fff;
+  border: 2px solid var(--navy);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
 
+.bookingRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.totalLine {
+  margin: 18px 0 0;
+  font-size: 15px;
+  color: var(--text-soft);
+}
+
+.totalLine strong {
+  color: var(--navy);
+  font-size: 18px;
+}
 @media (max-width: 600px) {
   .roomCard {
     flex-direction: column;
