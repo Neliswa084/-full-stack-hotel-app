@@ -12,6 +12,7 @@ import { AdminUsersPage } from './pages/AdminUsersPage'
 import {AdminBookingsPage } from './pages/AdminBookingsPage'
 import {HotelDetailsPage} from './pages/HotelDetailsPage'
 import { CheckoutPage } from './pages/CheckoutPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
         <Route path="hotels/:id" element={<HotelDetailsPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
       
-
+              <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }
