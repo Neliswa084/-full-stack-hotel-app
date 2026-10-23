@@ -12,7 +12,7 @@ export const Checkout = () => {
 
   return (
     <div className={styles.page}>
-      <Link to={-1 as any} className={styles.back}>Back</Link> // means “go back one page”, like the browser’s back button. It returns to the hotel they were booking.
+      <Link to={-1 as any} className={styles.back}>Back</Link> 
       <h1 className={styles.title}>Confirm your booking</h1>
 
       <div className={styles.summary}>
