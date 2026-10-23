@@ -1,7 +1,13 @@
-import React from 'react'
+import { NavBar } from '../components/NavBar/NavBar'
+import { Checkout } from '../components/Checkout/Checkout'
+import { Footer } from '../components/Footer/Footer'
 
 export const CheckoutPage = () => {
   return (
-    <div>CheckoutPage</div>
+    <>
+      <NavBar />
+      <Checkout />
+      <Footer />
+    </>
   )
 }

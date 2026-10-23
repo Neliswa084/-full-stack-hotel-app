@@ -1,0 +1,55 @@
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.back {
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  color: var(--navy);
+  margin: 16px 0 24px;
+}
+
+.summary {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.summaryTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  color: var(--navy);
+  margin: 0;
+}
+
+.room {
+  color: var(--text-soft);
+  margin: 4px 0 16px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+}
