@@ -27,7 +27,7 @@ export const Login = () => {
       if (result.payload.user.role === 'admin') {
         navigate('/admin')
       } else {
-        navigate('/home')
+        navigate('/')
       }
     }
   }
