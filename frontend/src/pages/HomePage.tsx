@@ -1,10 +1,13 @@
-import React from 'react'
+import { NavBar } from '../components/NavBar/NavBar'
+import { Checkout } from '../components/Checkout/Checkout'
+import { Footer } from '../components/Footer/Footer'
 
-export const HomePage = () => {
+export const CheckoutPage = () => {
   return (
     <>
-    <div>Here is Home Page </div>
-    <h1> Book here</h1>
+      <NavBar />
+      <Checkout />
+      <Footer />
     </>
   )
 }
