@@ -294,6 +294,62 @@
   font-size: 12px;
   color: var(--text-muted);
 }
+.reviewForm {
+  margin-top: 20px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.formTitle {
+  font-size: 17px;
+  color: var(--navy);
+  margin: 0 0 12px;
+}
+
+.formLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 12px 0 6px;
+}
+
+.formInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+textarea.formInput {
+  min-height: 90px;
+}
+
+.submitButton {
+  margin-top: 14px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reviewError {
+  color: #B03A2E;
+  font-size: 14px;
+}
+
+.thanks {
+  color: var(--navy);
+  font-weight: 600;
+  margin: 0;
+}
 
 @media (max-width: 600px) {
   .roomCard {
