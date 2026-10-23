@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import type { Review } from '../../types/hotel'
+import { getConfig } from '../../utils/getConfig'
 
 export interface ReviewsState {
     reviews: Review[];
@@ -28,6 +29,22 @@ export const fetchReviews = createAsyncThunk(
     }
 )
 
+export const addReview = createAsyncThunk(
+    'reviews/addReview',
+    async ({ hotelId, rating, comment }: { hotelId: string; rating: number; comment: string }, thunkAPI) => {
+        try {
+            const response = await axios.post(
+                `/api/hotels/${hotelId}/reviews`,
+                { rating, comment },
+                getConfig()
+            )
+            return response.data
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to add review')
+        }
+    }
+)
+
 export const reviewsSlice = createSlice({
     name: 'reviews',
     initialState,
@@ -40,6 +57,13 @@ export const reviewsSlice = createSlice({
                 state.total = action.payload.total
             })
             .addCase(fetchReviews.rejected, (state, action) => {
+                state.error = action.payload as string
+            })
+
+            .addCase(addReview.pending, (state) => {
+                state.error = null
+            })
+            .addCase(addReview.rejected, (state, action) => {
                 state.error = action.payload as string
             })
     },
