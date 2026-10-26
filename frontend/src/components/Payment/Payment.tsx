@@ -3,11 +3,11 @@ import { useSearchParams, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '../../redux/store'
 import { verifyPayment } from '../../redux/reducers/paymentSlice'
-import styles from './PaymentCallback.module.css'
+import styles from './Payment.module.css'
 
 type Status = 'loading' | 'success' | 'pending' | 'failed'
 
-export const PaymentCallback = () => {
+export const Payment = () => {
   const [searchParams] = useSearchParams()
   const dispatch = useDispatch<AppDispatch>()
 
