@@ -3,23 +3,7 @@ import axios from "axios";
 import * as bookingService from "../services/bookingService";
 import * as paymentService from "../services/paymentService";
 
-const PAYSTACK_URL = "https://api.paystack.co";
-const headers = () => ({
-    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-    "Content-Type": "application/json"
-});
-
-// If the error came from Paystack, send back a clear message
-const handleError = (error: unknown, res: Response, fallback: string) => {
-    if (axios.isAxiosError(error)) {
-        return res.status(502).json({
-            message: error.response?.data?.message || "Could not reach Paystack"
-        });
-    }
-    return res.status(500).json({ message: fallback });
-};
-
-// Step 1: start the payment, returns the Paystack link
+// Start the payment and get the Paystack payment link
 export const initializePayment = async (req: Request, res: Response) => {
     try {
         const bookingId = parseInt(String(req.body.booking_id));
@@ -35,44 +19,42 @@ export const initializePayment = async (req: Request, res: Response) => {
             return res.status(403).json({ message: "This is not your booking" });
         }
         if (booking.status !== "awaiting_payment") {
-            return res.status(400).json({ message: `This booking is already ${booking.status}` });
+            return res.status(400).json({ message: "This booking does not need payment" });
         }
 
-        // Unique reference per attempt, so the guest can retry if a payment fails
-        const reference = `${booking.booking_reference}_${Date.now()}`;
+        // A new reference for every try, so the guest can try again if it fails
+        const reference = booking.booking_reference + "_" + Date.now();
 
-        // Paystack wants the amount in cents
+        // Paystack counts in cents, so R850 must be sent as 85000
         const amountInCents = Math.round(Number(booking.total_amount) * 100);
 
-        const { data: result } = await axios.post(
-            `${PAYSTACK_URL}/transaction/initialize`,
+        const response = await axios.post(
+            "https://api.paystack.co/transaction/initialize",
             {
                 email: booking.guest_email,
                 amount: amountInCents,
                 currency: "ZAR",
-                reference,
-                callback_url: `${process.env.FRONTEND_URL}/payment/callback`,
-                metadata: { booking_id: booking.id }
+                reference: reference,
+                callback_url: process.env.FRONTEND_URL + "/payment/callback"
             },
-            { headers: headers() }
+            {
+                headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` }
+            }
         );
 
-        if (!result.status) {
-            return res.status(502).json({ message: result.message || "Could not start payment" });
-        }
-
+        // Save the payment as pending
         await paymentService.createPayment(booking.id, booking.total_amount, reference);
 
         res.status(200).json({
-            authorization_url: result.data.authorization_url,
-            reference
+            authorization_url: response.data.data.authorization_url,
+            reference: reference
         });
     } catch (error) {
-        handleError(error, res, "Failed to start payment");
+        res.status(500).json({ message: "Failed to start payment" });
     }
 };
 
-// Step 2: guest comes back from Paystack, we confirm with Paystack
+// Ask Paystack if the payment was successful
 export const verifyPayment = async (req: Request, res: Response) => {
     try {
         const reference = String(req.params.reference);
@@ -87,36 +69,31 @@ export const verifyPayment = async (req: Request, res: Response) => {
             return res.status(403).json({ message: "This is not your payment" });
         }
 
-        // Already handled
+        // If we already confirmed it before, don't do it again
         if (payment.status === "succeeded") {
             return res.status(200).json({ message: "Payment successful", booking });
         }
 
-        const { data: result } = await axios.get(
-            `${PAYSTACK_URL}/transaction/verify/${encodeURIComponent(reference)}`,
-            { headers: headers() }
+        const response = await axios.get(
+            `https://api.paystack.co/transaction/verify/${reference}`,
+            {
+                headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` }
+            }
         );
 
-        if (!result.status) {
-            return res.status(502).json({ message: result.message || "Could not verify payment" });
-        }
+        const paystackStatus = response.data.data.status;
+        const paidAmount = response.data.data.amount;
+        const expectedAmount = Math.round(Number(payment.amount) * 100);
 
-        const data = result.data;
-        const expectedCents = Math.round(Number(payment.amount) * 100);
-
-        if (data.status === "success" && data.amount === expectedCents && data.currency === "ZAR") {
+        if (paystackStatus === "success" && paidAmount === expectedAmount) {
             await paymentService.markPaymentSucceeded(payment.id);
-            const updated = await bookingService.updateBookingStatus(payment.booking_id, "confirmed");
-            return res.status(200).json({ message: "Payment successful", booking: updated });
+            const updatedBooking = await bookingService.updateBookingStatus(payment.booking_id, "confirmed");
+            return res.status(200).json({ message: "Payment successful", booking: updatedBooking });
         }
 
-        if (data.status === "failed" || data.status === "abandoned") {
-            await paymentService.markPaymentFailed(payment.id);
-            return res.status(400).json({ message: "Payment was not completed" });
-        }
-
-        res.status(200).json({ message: "Payment is still pending" });
+        await paymentService.markPaymentFailed(payment.id);
+        res.status(400).json({ message: "Payment was not completed" });
     } catch (error) {
-        handleError(error, res, "Failed to verify payment");
+        res.status(500).json({ message: "Failed to verify payment" });
     }
 };
