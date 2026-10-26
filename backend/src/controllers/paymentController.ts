@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import axios from "axios";
 import * as bookingService from "../services/bookingService";
 import * as paymentService from "../services/paymentService";
 
@@ -7,6 +8,16 @@ const headers = () => ({
     Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
     "Content-Type": "application/json"
 });
+
+// If the error came from Paystack, send back a clear message
+const handleError = (error: unknown, res: Response, fallback: string) => {
+    if (axios.isAxiosError(error)) {
+        return res.status(502).json({
+            message: error.response?.data?.message || "Could not reach Paystack"
+        });
+    }
+    return res.status(500).json({ message: fallback });
+};
 
 // Step 1: start the payment, returns the Paystack link
 export const initializePayment = async (req: Request, res: Response) => {
@@ -33,21 +44,20 @@ export const initializePayment = async (req: Request, res: Response) => {
         // Paystack wants the amount in cents
         const amountInCents = Math.round(Number(booking.total_amount) * 100);
 
-        const response = await fetch(`${PAYSTACK_URL}/transaction/initialize`, {
-            method: "POST",
-            headers: headers(),
-            body: JSON.stringify({
+        const { data: result } = await axios.post(
+            `${PAYSTACK_URL}/transaction/initialize`,
+            {
                 email: booking.guest_email,
                 amount: amountInCents,
                 currency: "ZAR",
                 reference,
                 callback_url: `${process.env.FRONTEND_URL}/payment/callback`,
                 metadata: { booking_id: booking.id }
-            })
-        });
+            },
+            { headers: headers() }
+        );
 
-        const result: any = await response.json();
-        if (!response.ok || !result.status) {
+        if (!result.status) {
             return res.status(502).json({ message: result.message || "Could not start payment" });
         }
 
@@ -58,7 +68,7 @@ export const initializePayment = async (req: Request, res: Response) => {
             reference
         });
     } catch (error) {
-        res.status(500).json({ message: "Failed to start payment" });
+        handleError(error, res, "Failed to start payment");
     }
 };
 
@@ -82,12 +92,12 @@ export const verifyPayment = async (req: Request, res: Response) => {
             return res.status(200).json({ message: "Payment successful", booking });
         }
 
-        const response = await fetch(`${PAYSTACK_URL}/transaction/verify/${encodeURIComponent(reference)}`, {
-            headers: headers()
-        });
-        const result: any = await response.json();
+        const { data: result } = await axios.get(
+            `${PAYSTACK_URL}/transaction/verify/${encodeURIComponent(reference)}`,
+            { headers: headers() }
+        );
 
-        if (!response.ok || !result.status) {
+        if (!result.status) {
             return res.status(502).json({ message: result.message || "Could not verify payment" });
         }
 
@@ -107,6 +117,6 @@ export const verifyPayment = async (req: Request, res: Response) => {
 
         res.status(200).json({ message: "Payment is still pending" });
     } catch (error) {
-        res.status(500).json({ message: "Failed to verify payment" });
+        handleError(error, res, "Failed to verify payment");
     }
 };
