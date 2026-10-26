@@ -23,6 +23,7 @@ export const NavBar = () => {
         </div>
 
         <Link to="/login" className={styles.cta}>Get Started</Link>
+        <Link to="/profile" className={styles.cta}>Profile</Link>
       </nav>
     </header>
   )
