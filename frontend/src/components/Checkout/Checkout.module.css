@@ -53,3 +53,36 @@
   font-weight: 700;
   color: var(--navy);
 }
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 14px 0 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+textarea.input {
+  min-height: 80px;
+}
+
+.twoColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 500px) {
+  .twoColumns {
+    grid-template-columns: 1fr;
+  }
+}
