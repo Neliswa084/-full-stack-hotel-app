@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useLocation, Navigate, Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import type { RootState } from '../../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from '../../redux/store'
+import { createBooking } from '../../redux/reducers/bookingSlice'
+import { initializePayment } from '../../redux/reducers/paymentSlice'
 import styles from './Checkout.module.css'
 
 export const Checkout = () => {
@@ -16,6 +18,13 @@ export const Checkout = () => {
   const [phone, setPhone] = useState('')
   const [arrivalTime, setArrivalTime] = useState('')
   const [specialRequests, setSpecialRequests] = useState('')
+
+  const dispatch = useDispatch<AppDispatch>()
+
+const [paymentMethod, setPaymentMethod] = useState('online')
+const [errorMessage, setErrorMessage] = useState('')
+const [confirmedReference, setConfirmedReference] = useState('')
+const [saving, setSaving] = useState(false)
 
   // If someone opens /checkout directly, there is nothing to show
   if (!booking) {
