@@ -4,16 +4,20 @@ import styles from './Profile.module.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../redux/reducers/loginSlice'
 import { useNavigate } from 'react-router-dom'
-import type { RootState } from '../../redux/store'
+import type {AppDispatch, RootState } from '../../redux/store'
+import { fetchUserBooking } from '../../redux/reducers/bookingSlice'
 
 type ProfileTab = 'profile' | 'bookings' | 'favourites'
 
 export const Profile = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
   const currentUser = useSelector(
     (state: RootState) => state.login.currentUser
+  )
+  const bookings = useSelector(
+    (state: RootState) => state.bookingGuest.bookings
   )
 
   const [activeTab, setActiveTab] = useState<ProfileTab>('profile')
@@ -28,6 +32,11 @@ export const Profile = () => {
 
   const [formData, setFormData] = useState(profile)
 
+
+  useEffect(() => {
+    dispatch(fetchUserBooking())
+  }, [dispatch])
+  
   useEffect(() => {
     const updatedProfile = {
       first_name: currentUser?.first_name ?? '',
@@ -293,20 +302,32 @@ export const Profile = () => {
             </>
           )}
 
-          {activeTab === 'bookings' && (
-            <section className={styles.section}>
-              <h1 className={styles.pageTitle}>My bookings</h1>
-              <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>▣</span>
-                <h2>Your bookings</h2>
-                <p>
-                  Your hotel bookings will appear here when booking
-                  information is connected.
-                </p>
-              </div>
-            </section>
-          )}
+   {activeTab === 'bookings' && (
+  <section className={styles.section}>
+    <h1 className={styles.pageTitle}>My bookings</h1>
 
+  
+    {bookings.length === 0 ? (
+      <div className={styles.emptyState}>
+        <span className={styles.emptyIcon}></span>
+        <h2>No bookings found</h2>
+        <p>You haven't made any bookings yet.</p>
+      </div>
+    ) : (
+
+      <div className={styles.bookingsList}>
+        {bookings.map((booking) => (
+          <div key={booking.id} className={styles.bookingCard}>
+            <h3>{booking.booking_reference || 'Booking Details'}</h3>
+            <p><strong> Check In Date:</strong> {booking.check_in_date}</p>
+            <p><strong> Check Out Date:</strong> {booking.check_out_date}</p>
+            <p><strong>Status:</strong> {booking.status}</p>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+)}
           {activeTab === 'favourites' && (
             <section className={styles.section}>
               <h1 className={styles.pageTitle}>My favourites</h1>
