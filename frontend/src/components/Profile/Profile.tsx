@@ -23,6 +23,9 @@ export const Profile = () => {
 
   return (
     <>
+      <div className={styles.container}>
+    
+      <div className={styles.content}>
       <div className={styles.sidebar}>
         <div className={styles.avatar}>{initials}</div>
         <p className={styles.fullName}>
@@ -38,7 +41,10 @@ export const Profile = () => {
 
         <button className={styles.logout} onClick={handleLogout}>Sign out</button>
       </div>
-
+      
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h3 className={styles.sectionTitle}>Personal Details</h3>
       <div className={styles.main}>
            <div className={styles.grid}>
               <div className={styles.field}>
@@ -59,6 +65,10 @@ export const Profile = () => {
               </div>
             </div>
       </div>
+            </div>
+                  </div>
+                  </div>
+                  </div>
 
     </>
   )
