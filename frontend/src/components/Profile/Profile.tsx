@@ -1,20 +1,70 @@
-import React from 'react'
+
+import React, { useEffect, useState } from 'react'
 import styles from './Profile.module.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../redux/reducers/loginSlice'
 import { useNavigate } from 'react-router-dom'
 import type { RootState } from '../../redux/store'
 
+type ProfileTab = 'profile' | 'bookings' | 'favourites'
 
 export const Profile = () => {
-
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const currentUser = useSelector((state: RootState) => state.login.currentUser)
 
-  const initials = currentUser
-    ? `${currentUser.first_name[0]}${currentUser.last_name[0]}`.toUpperCase()
-    : 'NN'
+  const currentUser = useSelector(
+    (state: RootState) => state.login.currentUser
+  )
+
+  const [activeTab, setActiveTab] = useState<ProfileTab>('profile')
+  const [isEditing, setIsEditing] = useState(false)
+
+  const [profile, setProfile] = useState({
+    first_name: currentUser?.first_name ?? '',
+    last_name: currentUser?.last_name ?? '',
+    email: currentUser?.email ?? '',
+    phone_number: currentUser?.phone_number ?? '',
+  })
+
+  const [formData, setFormData] = useState(profile)
+
+  useEffect(() => {
+    const updatedProfile = {
+      first_name: currentUser?.first_name ?? '',
+      last_name: currentUser?.last_name ?? '',
+      email: currentUser?.email ?? '',
+      phone_number: currentUser?.phone_number ?? '',
+    }
+
+    setProfile(updatedProfile)
+    setFormData(updatedProfile)
+  }, [currentUser])
+
+  const initials =
+    `${profile.first_name.charAt(0)}${profile.last_name.charAt(0)}`
+      .toUpperCase() || 'NN'
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }))
+  }
+
+  const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setProfile(formData)
+    setIsEditing(false)
+  }
+
+  const handleCancel = () => {
+    setFormData(profile)
+    setIsEditing(false)
+  }
 
   const handleLogout = () => {
     dispatch(logout())
@@ -22,55 +72,256 @@ export const Profile = () => {
   }
 
   return (
-    <>
-      <div className={styles.container}>
-    
+    <div className={styles.container}>
       <div className={styles.content}>
-      <div className={styles.sidebar}>
-        <div className={styles.avatar}>{initials}</div>
-        <p className={styles.fullName}>
-          {currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : ''}
-        </p>
-        <p className={styles.email}>{currentUser?.email}</p>
+        {/* Sidebar */}
+        <aside className={styles.sidebar}>
+          <div className={styles.userInfo}>
+            <div className={styles.avatar}>{initials}</div>
 
-        <div className={styles.nav}>
-          <button className={`${styles.navItem} ${styles.active}`}>My Profile</button>
-          <button className={styles.navItem} >My bookings</button>
-          <button className={styles.navItem}  >Favourites</button>
-        </div>
+            <p className={styles.fullName}>
+              {profile.first_name} {profile.last_name}
+            </p>
 
-        <button className={styles.logout} onClick={handleLogout}>Sign out</button>
+            <p className={styles.email}>{profile.email}</p>
+          </div>
+
+          <nav className={styles.nav}>
+            <button
+              type="button"
+              className={`${styles.navItem} ${
+                activeTab === 'profile' ? styles.active : ''
+              }`}
+              onClick={() => setActiveTab('profile')}
+            >
+              <span>♙</span> My Profile
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.navItem} ${
+                activeTab === 'bookings' ? styles.active : ''
+              }`}
+              onClick={() => setActiveTab('bookings')}
+            >
+              <span>▣</span> My Bookings
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.navItem} ${
+                activeTab === 'favourites' ? styles.active : ''
+              }`}
+              onClick={() => setActiveTab('favourites')}
+            >
+              <span>♡</span> Favourites
+            </button>
+          </nav>
+
+          <button
+            type="button"
+            className={styles.logout}
+            onClick={handleLogout}
+          >
+            ↪ Sign out
+          </button>
+        </aside>
+
+        {/* Main content */}
+        <main className={styles.main}>
+          {activeTab === 'profile' && (
+            <>
+              <h1 className={styles.pageTitle}>My profile</h1>
+
+              <section className={styles.section}>
+                <div className={styles.profileHeader}>
+                  <div className={styles.profileIdentity}>
+                    <div className={styles.largeAvatar}>
+                      {initials}
+                    </div>
+
+                    <div>
+                      <h2 className={styles.profileName}>
+                        {profile.first_name} {profile.last_name}
+                      </h2>
+                      <p className={styles.memberText}>
+                        Your Budgie Stays account
+                      </p>
+                    </div>
+                  </div>
+
+                  {!isEditing && (
+                    <button
+                      type="button"
+                      className={styles.editBtn}
+                      onClick={() => {
+                        setFormData(profile)
+                        setIsEditing(true)
+                      }}
+                    >
+                      ✎ Edit profile
+                    </button>
+                  )}
+                </div>
+
+                {isEditing ? (
+                  <form onSubmit={handleSave}>
+                    <div className={styles.grid}>
+                      <div className={styles.field}>
+                        <label htmlFor="first_name" className={styles.label}>
+                          First name
+                        </label>
+                        <input
+                          id="first_name"
+                          name="first_name"
+                          value={formData.first_name}
+                          onChange={handleInputChange}
+                          className={styles.input}
+                          required
+                        />
+                      </div>
+
+                      <div className={styles.field}>
+                        <label htmlFor="last_name" className={styles.label}>
+                          Last name
+                        </label>
+                        <input
+                          id="last_name"
+                          name="last_name"
+                          value={formData.last_name}
+                          onChange={handleInputChange}
+                          className={styles.input}
+                          required
+                        />
+                      </div>
+
+                      <div className={styles.field}>
+                        <label htmlFor="email" className={styles.label}>
+                          Email address
+                        </label>
+                        <input
+                          id="email"
+                          name="email"
+                          type="email"
+                          value={formData.email}
+                          className={styles.input}
+                          disabled
+                        />
+                      </div>
+
+                      <div className={styles.field}>
+                        <label htmlFor="phone_number" className={styles.label}>
+                          Cell phone number
+                        </label>
+                        <input
+                          id="phone_number"
+                          name="phone_number"
+                          type="tel"
+                          value={formData.phone_number}
+                          onChange={handleInputChange}
+                          className={styles.input}
+                        />
+                      </div>
+                    </div>
+
+                    <div className={styles.formActions}>
+                      <button
+                        type="button"
+                        className={styles.cancelBtn}
+                        onClick={handleCancel}
+                      >
+                        Cancel
+                      </button>
+
+                      <button type="submit" className={styles.saveBtn}>
+                        Save changes
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className={styles.grid}>
+                    <div className={styles.field}>
+                      <span className={styles.label}>First name</span>
+                      <p className={styles.value}>
+                        {profile.first_name || 'Not provided'}
+                      </p>
+                    </div>
+
+                    <div className={styles.field}>
+                      <span className={styles.label}>Last name</span>
+                      <p className={styles.value}>
+                        {profile.last_name || 'Not provided'}
+                      </p>
+                    </div>
+
+                    <div className={styles.field}>
+                      <span className={styles.label}>Email address</span>
+                      <p className={styles.value}>
+                        {profile.email || 'Not provided'}
+                      </p>
+                    </div>
+
+                    <div className={styles.field}>
+                      <span className={styles.label}>Cell phone number</span>
+                      <p className={styles.value}>
+                        {profile.phone_number || 'Not provided'}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </section>
+
+              <section className={styles.privacySection}>
+                <div>
+                  <h2 className={styles.privacyTitle}>Your data & privacy</h2>
+                  <p className={styles.privacyText}>
+                    Manage your personal information and account.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className={styles.privacyBtn}
+                  onClick={() =>
+                    window.alert(
+                      'Account data download is not connected yet.'
+                    )
+                  }
+                >
+                  Download my data
+                </button>
+              </section>
+            </>
+          )}
+
+          {activeTab === 'bookings' && (
+            <section className={styles.section}>
+              <h1 className={styles.pageTitle}>My bookings</h1>
+              <div className={styles.emptyState}>
+                <span className={styles.emptyIcon}>▣</span>
+                <h2>Your bookings</h2>
+                <p>
+                  Your hotel bookings will appear here when booking
+                  information is connected.
+                </p>
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'favourites' && (
+            <section className={styles.section}>
+              <h1 className={styles.pageTitle}>My favourites</h1>
+              <div className={styles.emptyState}>
+                <span className={styles.emptyIcon}>♡</span>
+                <h2>Your favourite hotels</h2>
+                <p>
+                  Hotels you save will appear here when your favourites
+                  data is connected.
+                </p>
+              </div>
+            </section>
+          )}
+        </main>
       </div>
-      
-          <div className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <h3 className={styles.sectionTitle}>Personal Details</h3>
-      <div className={styles.main}>
-           <div className={styles.grid}>
-              <div className={styles.field}>
-                <label className={styles.label}>Name</label>
-                <p className={styles.value}>{currentUser?.first_name}</p>
-              </div>
-              <div className={styles.field}>
-                <label className={styles.label}>Surname</label>
-                <p className={styles.value}>{currentUser?.last_name}</p>
-              </div>
-              <div className={styles.field}>
-                <label className={styles.label}>Email Address</label>
-                <p className={styles.value}>{currentUser?.email}</p>
-              </div>
-              <div className={styles.field}>
-                <label className={styles.label}>Cell Phone Number</label>
-                <p className={styles.value}>{currentUser?.phone_number}</p>
-              </div>
-            </div>
-      </div>
-            </div>
-                  </div>
-                  </div>
-                  </div>
-
-    </>
+    </div>
   )
 }
-
