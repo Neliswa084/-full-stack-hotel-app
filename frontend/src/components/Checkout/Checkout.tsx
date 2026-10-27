@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useLocation, Navigate, Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import type { RootState } from '../../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from '../../redux/store'
+import { createBooking } from '../../redux/reducers/bookingSlice'
+import { initializePayment } from '../../redux/reducers/paymentSlice'
 import styles from './Checkout.module.css'
 
 export const Checkout = () => {
@@ -17,9 +19,84 @@ export const Checkout = () => {
   const [arrivalTime, setArrivalTime] = useState('')
   const [specialRequests, setSpecialRequests] = useState('')
 
+  const dispatch = useDispatch<AppDispatch>()
+
+  const [paymentMethod, setPaymentMethod] = useState('online')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [confirmedReference, setConfirmedReference] = useState('')
+  const [saving, setSaving] = useState(false)
+
   // If someone opens /checkout directly, there is nothing to show
   if (!booking) {
     return <Navigate to="/" />
+  }
+
+  const handleConfirm = async () => {
+    setErrorMessage('')
+
+    if (!firstName || !lastName || !email) {
+      setErrorMessage('Please fill in your name and email')
+      return
+    }
+
+    setSaving(true)
+
+    // 1. Save the booking
+    const bookingResult = await dispatch(
+      createBooking({
+        room_type_id: booking.roomId,
+        check_in_date: booking.checkIn,
+        check_out_date: booking.checkOut,
+        number_of_rooms: booking.numberOfRooms,
+        number_of_adults: booking.adults,
+        number_of_children: booking.children,
+        guest_first_name: firstName,
+        guest_last_name: lastName,
+        guest_email: email,
+        guest_phone: phone,
+        arrival_time: arrivalTime,
+        special_requests: specialRequests,
+        payment_method: paymentMethod,
+      })
+    )
+
+    if (bookingResult.meta.requestStatus !== 'fulfilled') {
+      setErrorMessage(bookingResult.payload as string)
+      setSaving(false)
+      return
+    }
+
+    const newBooking = (bookingResult.payload as any).booking
+
+    // Pay at the hotel: done, show the reference
+    if (paymentMethod !== 'online') {
+      setConfirmedReference(newBooking.booking_reference)
+      setSaving(false)
+      return
+    }
+
+    //  Pay online: get the Paystack link and go there
+    const paymentResult = await dispatch(initializePayment(newBooking.id))
+
+    if (paymentResult.meta.requestStatus === 'fulfilled') {
+      window.location.href = (paymentResult.payload as any).authorization_url
+    } else {
+      setErrorMessage(paymentResult.payload as string)
+      setSaving(false)
+    }
+  }
+
+  if (confirmedReference) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.success}>
+          <h1 className={styles.title}>Booking confirmed!</h1>
+          <p>Your booking reference is <strong>{confirmedReference}</strong>.</p>
+          <p>Please pay at the hotel when you arrive.</p>
+          <Link to="/" className={styles.confirmButton}>Back to home</Link>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -101,6 +178,49 @@ export const Checkout = () => {
           onChange={(e) => setSpecialRequests(e.target.value)}
         />
       </div>
+
+      <div className={styles.summary}>
+        <h2 className={styles.summaryTitle}>How would you like to pay?</h2>
+
+        <label className={styles.option}>
+          <input
+            type="radio"
+            name="payment"
+            value="online"
+            checked={paymentMethod === 'online'}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+          />
+          Pay online now (card)
+        </label>
+
+        <label className={styles.option}>
+          <input
+            type="radio"
+            name="payment"
+            value="cash_at_hotel"
+            checked={paymentMethod === 'cash_at_hotel'}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+          />
+          Pay with cash at the hotel
+        </label>
+
+        <label className={styles.option}>
+          <input
+            type="radio"
+            name="payment"
+            value="card_at_hotel"
+            checked={paymentMethod === 'card_at_hotel'}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+          />
+          Pay with card at the hotel
+        </label>
+      </div>
+
+      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+
+      <button className={styles.confirmButton} onClick={handleConfirm} disabled={saving}>
+        {saving ? 'Please wait...' : paymentMethod === 'online' ? `Confirm and pay R ${booking.total.toLocaleString('en-ZA')}` : 'Confirm booking'}
+      </button>
     </div>
   )
 }

@@ -12,6 +12,8 @@ import bookingRoutes from "./routes/bookingRoutes";
 import reviewsRoutes from "./routes/reviewsRoutes";
 import favouriteRoutes from "./routes/favouriteRoutes";
 import adminRoutes from "./routes/adminRoutes";
+import paymentRoutes from "./routes/paymentRoutes";
+
 
 
 
@@ -25,7 +27,7 @@ const startServer = async () => {
   await initDb()
 
   app.use(express.json())
-app.use(cors())
+  app.use(cors())
 
   app.use("/api/auth", authRoutes)
   app.use("/api/hotels", hotelsRoutes)
@@ -36,6 +38,7 @@ app.use(cors())
   app.use("/api/reviews", reviewsRoutes);
   app.use("/api/favourites", favouriteRoutes);
   app.use("/api/admin", adminRoutes);
+  app.use("/api/payments", paymentRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)

@@ -9,7 +9,9 @@ import photosReducer from './reducers/photosSlice';
 import amenitiesReducer from './reducers/amenitiesSlice';
 import usersReducer from './reducers/adminUsersSlice';
 import bookingsReducer from './reducers/adminBookingsSlice';
-import reviewsReducer from './reducers/reviewsSlice'
+import reviewsReducer from './reducers/reviewsSlice';
+import guestBookingsReducer from './reducers/bookingSlice';
+import paymentReducer from './reducers/paymentSlice'
 
 const store = configureStore ({
     reducer : {
@@ -23,7 +25,9 @@ const store = configureStore ({
         amenities: amenitiesReducer,
         users: usersReducer,
         bookings: bookingsReducer,
-        reviews: reviewsReducer
+        reviews: reviewsReducer,
+        bookingGuest:guestBookingsReducer,
+        payments: paymentReducer
     }
 })
 

@@ -13,6 +13,9 @@ import {AdminBookingsPage } from './pages/AdminBookingsPage'
 import {HotelDetailsPage} from './pages/HotelDetailsPage'
 import { CheckoutPage } from './pages/CheckoutPage'
 import { NotFoundPage } from './pages/NotFoundPage'
+import { PaymentPage } from './pages/PaymentPage'
+import { AboutUsPage } from './pages/AboutUsPage'
+import { ContactPage } from './pages/ContactPage'
 
 function App() {
   return (
@@ -32,8 +35,14 @@ function App() {
       
         <Route path="hotels/:id" element={<HotelDetailsPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+
+        <Route path="/payment/callback" element={<PaymentPage />} />
+
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/contact" element={<ContactPage />} />
       
-              <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+
     </Routes>
   )
 }

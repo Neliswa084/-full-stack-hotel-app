@@ -1,3 +1,23 @@
+export type CreatedBooking = Omit<Booking, 'hotel_name' | 'room_name'>
+
+export type NewBooking = Pick<Booking,
+  | 'room_type_id'
+  | 'check_in_date'
+  | 'check_out_date'
+  | 'number_of_rooms'
+  | 'number_of_adults'
+  | 'number_of_children'
+  | 'guest_first_name'
+  | 'guest_last_name'
+  | 'guest_email'
+  | 'guest_phone'
+  | 'arrival_time'
+  | 'special_requests'
+  | 'payment_method'
+>
+
+
+
 export interface Booking {
   id: number;
   booking_reference: string;

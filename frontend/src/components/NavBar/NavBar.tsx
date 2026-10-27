@@ -18,11 +18,12 @@ export const NavBar = () => {
         <div className={styles.links}>
           <NavLink to="/" end className={linkClass}>Home</NavLink>
           <NavLink to="/hotels" className={linkClass}>Hotels</NavLink>
-          <a href="#about" className={styles.link}>About</a>
-          <a href="#contact" className={styles.link}>Contact</a>
+          <a href="/about" className={styles.link}>About</a>
+          <a href="/contact" className={styles.link}>Contact</a>
         </div>
 
         <Link to="/login" className={styles.cta}>Get Started</Link>
+        <Link to="/profile" className={styles.cta}>Profile</Link>
       </nav>
     </header>
   )
