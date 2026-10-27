@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { getConfig } from '../../utils/getConfig'
 import axios from 'axios'
 
 export interface User {
@@ -37,9 +38,21 @@ export const loginUser = createAsyncThunk(
   async (loginData: LoginData, thunkAPI) => {
     try {
       const response = await axios.post('/api/auth/login', loginData)
-      return response.data          
+      return response.data
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Server error')
+    }
+  }
+)
+
+export const updateProfile = createAsyncThunk(
+  'login/updateProfile',
+  async (data: { first_name: string; last_name: string; phone_number: string }, thunkAPI) => {
+    try {
+      const response = await axios.put('/api/users/profile', data, getConfig())
+      return response.data
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to update profile')
     }
   }
 )
@@ -69,6 +82,20 @@ export const loginSlice = createSlice({
         localStorage.setItem('token', action.payload.token)
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload as string
+      })
+
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false
+        state.currentUser = { ...state.currentUser!, ...action.payload.user }
+        localStorage.setItem('currentUser', JSON.stringify(state.currentUser))
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload as string
       })
