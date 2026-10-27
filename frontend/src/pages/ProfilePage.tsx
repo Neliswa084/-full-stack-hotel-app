@@ -1,7 +1,16 @@
 import React from 'react'
+import { Profile } from '../components/Profile/Profile'
+import { NavBar } from '../components/NavBar/NavBar'
+import { Footer } from '../components/Footer/Footer'
 
 export const ProfilePage = () => {
   return (
-    <div>ProfilePage</div>
+
+    <>
+      <NavBar />
+      <Profile />
+      <Footer />
+
+      </>
   )
 }
