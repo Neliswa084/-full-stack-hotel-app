@@ -57,6 +57,18 @@ export const updateProfile = createAsyncThunk(
   }
 )
 
+export const googleLogin = createAsyncThunk(
+  'auth/googleLogin',
+  async (credential: string, thunkAPI) => {
+    try {
+      const response = await axios.post('/api/auth/google', { credential })
+      return response.data
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || 'Google sign in failed')
+    }
+  }
+)
+
 export const loginSlice = createSlice({
   name: 'login',
   initialState,
@@ -96,6 +108,21 @@ export const loginSlice = createSlice({
         localStorage.setItem('currentUser', JSON.stringify(state.currentUser))
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload as string
+      })
+            .addCase(googleLogin.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
+        state.loading = false
+        state.currentUser = action.payload.user
+        state.token = action.payload.token
+        localStorage.setItem('currentUser', JSON.stringify(action.payload.user))
+        localStorage.setItem('token', action.payload.token)
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload as string
       })
