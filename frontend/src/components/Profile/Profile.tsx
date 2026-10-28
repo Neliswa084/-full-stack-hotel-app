@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react'
 import styles from './Profile.module.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout  ,updateProfile} from '../../redux/reducers/loginSlice'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate ,Navigate } from 'react-router-dom'
 import type {AppDispatch, RootState } from '../../redux/store'
 import { fetchUserBooking } from '../../redux/reducers/bookingSlice'
+
 
 type ProfileTab = 'profile' | 'bookings' | 'favourites'
 
@@ -45,6 +46,10 @@ export const Profile = () => {
     setProfile(updatedProfile)
     setFormData(updatedProfile)
   }, [currentUser])
+
+    if (!currentUser) {
+    return <Navigate to="/login" />
+  }
 
   const initials =
     `${profile.first_name.charAt(0)}${profile.last_name.charAt(0)}`

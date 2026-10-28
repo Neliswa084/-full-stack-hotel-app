@@ -58,3 +58,25 @@ export const updateUserInfo = async (
   return rows[0] || null;
 };
 
+export const createGoogleUser = async (
+  first_name: string, last_name: string, email: string,
+  google_id: string, profile_picture: string | null
+): Promise<User> => {
+  const { rows } = await query(
+    `INSERT INTO users (first_name, last_name, email, google_id, profile_picture)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING *`,
+    [first_name, last_name, email, google_id, profile_picture]
+  );
+  return rows[0];
+};
+
+export const linkGoogleAccount = async (id: number, google_id: string, profile_picture: string | null) => {
+  await query(
+    `UPDATE users SET google_id = $1,
+        profile_picture = COALESCE(profile_picture, $2),
+        updated_at = CURRENT_TIMESTAMP
+     WHERE id = $3`,
+    [google_id, profile_picture, id]
+  );
+};

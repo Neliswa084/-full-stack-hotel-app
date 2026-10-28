@@ -1,10 +1,14 @@
 import styles from './NavBar.module.css'
 import { Link, NavLink } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import type { RootState } from '../../redux/store'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   isActive ? `${styles.link} ${styles.active}` : styles.link
 
 export const NavBar = () => {
+  const { currentUser } = useSelector((state: RootState) => state.login)
+
   return (
     <header className={styles.header}>
       <nav className={styles.nav} aria-label="Main">
@@ -18,12 +22,15 @@ export const NavBar = () => {
         <div className={styles.links}>
           <NavLink to="/" end className={linkClass}>Home</NavLink>
           <NavLink to="/hotels" className={linkClass}>Hotels</NavLink>
-          <a href="/about" className={styles.link}>About</a>
-          <a href="/contact" className={styles.link}>Contact</a>
+          <NavLink to="/about" className={linkClass}>About</NavLink>
+          <NavLink to="/contact" className={linkClass}>Contact</NavLink>
         </div>
 
-        <Link to="/login" className={styles.cta}>Get Started</Link>
-        <Link to="/profile" className={styles.cta}>Profile</Link>
+        {currentUser ? (
+          <Link to="/profile" className={styles.cta}>Profile</Link>
+        ) : (
+          <Link to="/login" className={styles.cta}>Get Started</Link>
+        )}
       </nav>
     </header>
   )
