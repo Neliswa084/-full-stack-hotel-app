@@ -1,0 +1,50 @@
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  color: var(--navy);
+  margin: 0 0 16px;
+}
+
+.intro {
+  color: var(--text-soft);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 auto 40px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  text-align: left;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.cardTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: var(--navy);
+  margin: 0 0 8px;
+}
+
+@media (max-width: 800px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
