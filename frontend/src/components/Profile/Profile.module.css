@@ -495,6 +495,11 @@
     padding: 16px;
   }
 
+  .error {
+  color: #B03A2E;
+  font-size: 14px;
+}
+
   .formActions {
     justify-content: stretch;
   }

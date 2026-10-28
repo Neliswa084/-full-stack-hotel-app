@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './Profile.module.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '../../redux/reducers/loginSlice'
+import { logout  ,updateProfile} from '../../redux/reducers/loginSlice'
 import { useNavigate } from 'react-router-dom'
 import type {AppDispatch, RootState } from '../../redux/store'
 import { fetchUserBooking } from '../../redux/reducers/bookingSlice'
@@ -13,12 +13,9 @@ export const Profile = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
-  const currentUser = useSelector(
-    (state: RootState) => state.login.currentUser
-  )
-  const bookings = useSelector(
-    (state: RootState) => state.bookingGuest.bookings
-  )
+  const currentUser = useSelector((state: RootState) => state.login.currentUser)
+  const profileError = useSelector((state: RootState) => state.login.error)
+  const bookings = useSelector((state: RootState) => state.bookingGuest.bookings)
 
   const [activeTab, setActiveTab] = useState<ProfileTab>('profile')
   const [isEditing, setIsEditing] = useState(false)
@@ -64,11 +61,21 @@ export const Profile = () => {
     }))
   }
 
-  const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setProfile(formData)
+const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault()
+
+  const result = await dispatch(
+    updateProfile({
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      phone_number: formData.phone_number,
+    })
+  )
+
+  if (result.meta.requestStatus === 'fulfilled') {
     setIsEditing(false)
   }
+}
 
   const handleCancel = () => {
     setFormData(profile)
@@ -232,6 +239,8 @@ export const Profile = () => {
                         />
                       </div>
                     </div>
+
+                    {profileError && <p className={styles.error}>{profileError}</p>}
 
                     <div className={styles.formActions}>
                       <button
