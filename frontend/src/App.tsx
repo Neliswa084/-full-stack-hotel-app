@@ -17,6 +17,7 @@ import { PaymentPage } from './pages/PaymentPage'
 import { AboutUsPage } from './pages/AboutUsPage'
 import { ContactPage } from './pages/ContactPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { HotelsPage } from './pages/HotelsPage'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="bookings" element= {<AdminBookingsPage />} />
       </Route>
       
+      <Route path="/hotels" element={<HotelsPage />} />
         <Route path="hotels/:id" element={<HotelDetailsPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
 
