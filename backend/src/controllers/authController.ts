@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as userService from "../services/userService"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
+import { OAuth2Client } from "google-auth-library";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { first_name, last_name, phone_number, password } = req.body;
@@ -101,5 +102,68 @@ export const updateMyInfo = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error updating profile" });
+  }
+};
+
+export const googleLogin = async (req: Request, res: Response) => {
+  const { credential } = req.body;
+
+  if (!credential) {
+    return res.status(400).json({ message: "Google credential is required" });
+  }
+
+  try {
+    // Created here, not at the top of the file, so the .env value is already loaded
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+
+    if (!payload || !payload.email || !payload.email_verified) {
+      return res.status(401).json({ message: "Google account could not be verified" });
+    }
+
+    const email = payload.email.toLowerCase();
+    let user = await userService.findUserByEmail(email);
+
+    if (!user) {
+      // First time with Google: create the account
+      user = await userService.createGoogleUser(
+        payload.given_name || "Google",
+        payload.family_name || "",
+        email,
+        payload.sub,
+        payload.picture || null
+      );
+    } else if (!user.google_id) {
+      
+      await userService.linkGoogleAccount(user.id, payload.sub, payload.picture || null);
+    }
+
+    if (user.account_status === "blocked") {
+      return res.status(403).json({ message: "Your account has been blocked" });
+    }
+
+    const tokenPayload = { userId: user.id, email: user.email, role: user.role };
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: "1h" });
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        phone_number: user.phone_number,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ message: "Google sign in failed" });
   }
 };
