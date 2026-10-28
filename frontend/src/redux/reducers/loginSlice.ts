@@ -49,7 +49,7 @@ export const updateProfile = createAsyncThunk(
   'login/updateProfile',
   async (data: { first_name: string; last_name: string; phone_number: string }, thunkAPI) => {
     try {
-      const response = await axios.put('/api/users/profile', data, getConfig())
+      const response = await axios.patch('/api/auth/me', data, getConfig())
       return response.data
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to update profile')
