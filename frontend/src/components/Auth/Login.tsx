@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { TextInput } from '../UI/Inputs/TextInput'
 import { Button } from '../UI/Buttons/Button'
 import type { RootState, AppDispatch } from '../../redux/store'
-import { loginUser } from '../../redux/reducers/loginSlice'
+import { loginUser ,googleLogin } from '../../redux/reducers/loginSlice'
+import { GoogleLogin } from '@react-oauth/google'
+
 
 export const Login = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -24,6 +26,18 @@ export const Login = () => {
 
     if (loginUser.fulfilled.match(result)) {
       
+      if (result.payload.user.role === 'admin') {
+        navigate('/admin')
+      } else {
+        navigate('/')
+      }
+    }
+  }
+
+    const handleGoogle = async (credential: string) => {
+    const result = await dispatch(googleLogin(credential))
+
+    if (googleLogin.fulfilled.match(result)) {
       if (result.payload.user.role === 'admin') {
         navigate('/admin')
       } else {
@@ -62,6 +76,14 @@ export const Login = () => {
             <Link to="/forgot-password" className={styles.forgot}>Forgot password?</Link>
 
             <Button label={loading ? 'Signing in…' : 'Sign in'} type="submit" disabled={loading} />
+                        <p className={styles.switchText}>or</p>
+
+            <GoogleLogin
+              onSuccess={(response) => {
+                if (response.credential) handleGoogle(response.credential)
+              }}
+              onError={() => console.log('Google sign in failed')}
+            />
 
             <p className={styles.switchText}>
               New to Budgie Stays? <Link to="/register" className={styles.link}>Create an account</Link>
