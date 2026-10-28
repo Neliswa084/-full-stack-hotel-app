@@ -16,6 +16,7 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { PaymentPage } from './pages/PaymentPage'
 import { AboutUsPage } from './pages/AboutUsPage'
 import { ContactPage } from './pages/ContactPage'
+import { ProfilePage } from './pages/ProfilePage'
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
 
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/contact" element={<ContactPage />} />
+
+        <Route path="/profile" element={<ProfilePage />} />
       
         <Route path="*" element={<NotFoundPage />} />
 
