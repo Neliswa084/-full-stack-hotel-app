@@ -56,13 +56,15 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(200).json({
       message: "Login successful",
       token,
-      user: {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        role: user.role,
-      },
+     user: {
+    id: user.id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    email: user.email,
+    phone_number: user.phone_number,
+    role: user.role
+},
+      
     });
   } catch (error) {
     console.error(error);
@@ -82,13 +84,14 @@ export const updateMyInfo = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Phone number is too long" });
     }
 
+   
     const user = await userService.updateUserInfo(
-      req.user!.id,
-      first_name,
-      last_name,
-      phone_number || null,
-      profile_picture || null
-    );
+    req.user!.id,
+    first_name,
+    last_name,
+    phone_number || null,
+    profile_picture || req.user!.profile_picture || null
+)
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
