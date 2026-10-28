@@ -110,7 +110,7 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
               }`}
               onClick={() => setActiveTab('profile')}
             >
-              <span>♙</span> My Profile
+              <span></span> My Profile
             </button>
 
             <button
@@ -120,7 +120,7 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
               }`}
               onClick={() => setActiveTab('bookings')}
             >
-              <span>▣</span> My Bookings
+              <span></span> My Bookings
             </button>
 
             <button
@@ -130,7 +130,7 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
               }`}
               onClick={() => setActiveTab('favourites')}
             >
-              <span>♡</span> Favourites
+              <span></span> Favourites
             </button>
           </nav>
 
@@ -139,7 +139,7 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
             className={styles.logout}
             onClick={handleLogout}
           >
-            ↪ Sign out
+            Sign out
           </button>
         </aside>
 
@@ -175,7 +175,7 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
                         setIsEditing(true)
                       }}
                     >
-                      ✎ Edit profile
+                       Edit profile
                     </button>
                   )}
                 </div>
@@ -289,25 +289,6 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
                 )}
               </section>
 
-              <section className={styles.privacySection}>
-                <div>
-                  <h2 className={styles.privacyTitle}>Your data & privacy</h2>
-                  <p className={styles.privacyText}>
-                    Manage your personal information and account.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  className={styles.privacyBtn}
-                  onClick={() =>
-                    window.alert(
-                      'Account data download is not connected yet.'
-                    )
-                  }
-                >
-                  Download my data
-                </button>
-              </section>
             </>
           )}
 
@@ -341,7 +322,7 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
             <section className={styles.section}>
               <h1 className={styles.pageTitle}>My favourites</h1>
               <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}>♡</span>
+                <span className={styles.emptyIcon}></span>
                 <h2>Your favourite hotels</h2>
                 <p>
                   Hotels you save will appear here when your favourites
