@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '../../redux/store'
 import { fetchHotelById } from '../../redux/reducers/hotelSlice'
 import styles from './HotelDetails.module.css'
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft  , Heart} from 'lucide-react';
 import { fetchPhotos } from '../../redux/reducers/photosSlice'
 import { fetchRooms } from '../../redux/reducers/roomsSlice'
 import { fetchHotelAmenities } from '../../redux/reducers/amenitiesSlice'
 import { fetchReviews, addReview } from '../../redux/reducers/reviewsSlice'
+import { fetchFavourites, addFavourite, removeFavourite } from '../../redux/reducers/favouritesSlice'
 
 
 export const HotelDetails = () => {
@@ -21,6 +22,7 @@ export const HotelDetails = () => {
   const { hotelAmenities } = useSelector((state: RootState) => state.amenities)
   const { reviews, average, total, error: reviewError } = useSelector((state: RootState) => state.reviews)
   const { currentUser } = useSelector((state: RootState) => state.login)
+  const { favourites } = useSelector((state: RootState) => state.favourites)
 
   const [rating, setRating] = useState('5')
   const [comment, setComment] = useState('')
