@@ -47,6 +47,18 @@ export const fetchUserBooking = createAsyncThunk(
     }
 )
 
+export const cancelBooking = createAsyncThunk(
+    'booking/cancelBooking',
+    async (id: number, thunkAPI) => {
+        try {
+            const response = await axios.patch(`/api/bookings/${id}/cancel`, {}, getConfig())
+            return response.data
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to cancel booking')
+        }
+    }
+)
+
 export const bookingSlice = createSlice({
     name: 'booking',
     initialState,

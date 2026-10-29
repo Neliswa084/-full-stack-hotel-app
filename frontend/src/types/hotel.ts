@@ -55,3 +55,13 @@ export interface Review {
   created_at: string;
   reviewer: string;
 }
+
+export interface Favourite {
+  id: number;
+  name: string;
+  city: string;
+  star_rating: number;
+  saved_at: string;
+  main_image: string | null;
+  price_from: string | null;
+}

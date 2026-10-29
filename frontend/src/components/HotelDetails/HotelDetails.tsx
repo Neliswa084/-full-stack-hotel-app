@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '../../redux/store'
 import { fetchHotelById } from '../../redux/reducers/hotelSlice'
 import styles from './HotelDetails.module.css'
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Heart } from 'lucide-react';
 import { fetchPhotos } from '../../redux/reducers/photosSlice'
 import { fetchRooms } from '../../redux/reducers/roomsSlice'
 import { fetchHotelAmenities } from '../../redux/reducers/amenitiesSlice'
 import { fetchReviews, addReview } from '../../redux/reducers/reviewsSlice'
+import { fetchFavourites, addFavourite, removeFavourite } from '../../redux/reducers/favouritesSlice'
 
 
 export const HotelDetails = () => {
@@ -21,6 +22,7 @@ export const HotelDetails = () => {
   const { hotelAmenities } = useSelector((state: RootState) => state.amenities)
   const { reviews, average, total, error: reviewError } = useSelector((state: RootState) => state.reviews)
   const { currentUser } = useSelector((state: RootState) => state.login)
+  const { favourites } = useSelector((state: RootState) => state.favourites)
 
   const [rating, setRating] = useState('5')
   const [comment, setComment] = useState('')
@@ -49,6 +51,12 @@ export const HotelDetails = () => {
     setActivePhoto(0)
   }, [dispatch, id])
 
+  useEffect(() => {
+    if (currentUser) {
+      dispatch(fetchFavourites())
+    }
+  }, [dispatch, currentUser])
+
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -60,6 +68,26 @@ export const HotelDetails = () => {
       dispatch(fetchReviews(id!))
     }
   }
+
+  const isFavourite = favourites.some((hotel) => hotel.id === Number(id))
+
+  const handleFavourite = async () => {
+    if (!currentUser) {
+      navigate('/login')
+      return
+    }
+
+    if (isFavourite) {
+      await dispatch(removeFavourite(Number(id)))
+    } else {
+      const result = await dispatch(addFavourite(Number(id)))
+      if (addFavourite.fulfilled.match(result)) {
+        dispatch(fetchFavourites())
+      }
+    }
+  }
+
+
   if (loading) return <p className={styles.message}>Loading...</p>
   if (error) return <p className={styles.message}>{error}</p>
   if (!selectedHotel) return null
@@ -119,8 +147,15 @@ export const HotelDetails = () => {
         <ArrowLeft size={18} className={styles.icon} aria-hidden="true" />
         Back to hotels
       </Link>
+      <div className={styles.titleRow}>
+        <h1 className={styles.name}>{selectedHotel.name}</h1>
 
-      <h1 className={styles.name}>{selectedHotel.name}</h1>
+        <button type="button" className={styles.favouriteButton} onClick={handleFavourite}>
+          <Heart size={18} fill={isFavourite ? 'currentColor' : 'none'} aria-hidden="true" />
+          {isFavourite ? 'Saved' : 'Save'}
+        </button>
+      </div>
+
       <p className={styles.location}>
         {selectedHotel.address}, {selectedHotel.city} · {selectedHotel.star_rating} ⭐
       </p>

@@ -13,7 +13,7 @@ export const SearchBar = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    navigate(`/hotels?city=${city}&check_in=${checkIn}&check_out=${checkOut}&guests=${guests}`)
+    navigate(`/hotels?city=${encodeURIComponent(city)}&check_in=${checkIn}&check_out=${checkOut}&guests=${guests}`)
   }
 
   return (

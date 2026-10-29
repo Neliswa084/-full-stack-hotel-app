@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import styles from './Profile.module.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout  ,updateProfile} from '../../redux/reducers/loginSlice'
-import { useNavigate ,Navigate } from 'react-router-dom'
-import type {AppDispatch, RootState } from '../../redux/store'
-import { fetchUserBooking } from '../../redux/reducers/bookingSlice'
+import { logout, updateProfile } from '../../redux/reducers/loginSlice'
+import { useNavigate, Navigate } from 'react-router-dom'
+import type { AppDispatch, RootState } from '../../redux/store'
+import { fetchUserBooking, cancelBooking } from '../../redux/reducers/bookingSlice'
+import { Link } from 'react-router-dom'
+import { fetchFavourites, removeFavourite } from '../../redux/reducers/favouritesSlice'
+import { initializePayment } from '../../redux/reducers/paymentSlice'
 
 
 type ProfileTab = 'profile' | 'bookings' | 'favourites'
@@ -28,9 +31,13 @@ export const Profile = () => {
   const currentUser = useSelector((state: RootState) => state.login.currentUser)
   const profileError = useSelector((state: RootState) => state.login.error)
   const bookings = useSelector((state: RootState) => state.bookingGuest.bookings)
+  const favourites = useSelector((state: RootState) => state.favourites.favourites)
 
   const [activeTab, setActiveTab] = useState<ProfileTab>('profile')
   const [isEditing, setIsEditing] = useState(false)
+
+  const [bookingMessage, setBookingMessage] = useState('')
+  const [busyId, setBusyId] = useState<number | null>(null)
 
   const [profile, setProfile] = useState({
     first_name: currentUser?.first_name ?? '',
@@ -44,8 +51,9 @@ export const Profile = () => {
 
   useEffect(() => {
     dispatch(fetchUserBooking())
+    dispatch(fetchFavourites())
   }, [dispatch])
-  
+
   useEffect(() => {
     const updatedProfile = {
       first_name: currentUser?.first_name ?? '',
@@ -58,7 +66,7 @@ export const Profile = () => {
     setFormData(updatedProfile)
   }, [currentUser])
 
-    if (!currentUser) {
+  if (!currentUser) {
     return <Navigate to="/login" />
   }
 
@@ -77,21 +85,21 @@ export const Profile = () => {
     }))
   }
 
-const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault()
+  const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-  const result = await dispatch(
-    updateProfile({
-      first_name: formData.first_name,
-      last_name: formData.last_name,
-      phone_number: formData.phone_number,
-    })
-  )
+    const result = await dispatch(
+      updateProfile({
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone_number: formData.phone_number,
+      })
+    )
 
-  if (result.meta.requestStatus === 'fulfilled') {
-    setIsEditing(false)
+    if (result.meta.requestStatus === 'fulfilled') {
+      setIsEditing(false)
+    }
   }
-}
 
   const handleCancel = () => {
     setFormData(profile)
@@ -101,6 +109,38 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
   const handleLogout = () => {
     dispatch(logout())
     navigate('/')
+  }
+
+  const today = new Date().toISOString().slice(0, 10)
+
+  const handlePayNow = async (bookingId: number) => {
+    setBookingMessage('')
+    setBusyId(bookingId)
+
+    const result = await dispatch(initializePayment(bookingId))
+
+    if (initializePayment.fulfilled.match(result)) {
+      window.location.href = result.payload.authorization_url
+    } else {
+      setBookingMessage(result.payload as string)
+      setBusyId(null)
+    }
+  }
+
+  const handleCancelBooking = async (bookingId: number) => {
+    if (!window.confirm('Are you sure you want to cancel this booking?')) return
+
+    setBookingMessage('')
+    setBusyId(bookingId)
+
+    const result = await dispatch(cancelBooking(bookingId))
+
+    if (cancelBooking.fulfilled.match(result)) {
+      dispatch(fetchUserBooking())
+    } else {
+      setBookingMessage(result.payload as string)
+    }
+    setBusyId(null)
   }
 
   return (
@@ -121,9 +161,8 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
           <nav className={styles.nav}>
             <button
               type="button"
-              className={`${styles.navItem} ${
-                activeTab === 'profile' ? styles.active : ''
-              }`}
+              className={`${styles.navItem} ${activeTab === 'profile' ? styles.active : ''
+                }`}
               onClick={() => setActiveTab('profile')}
             >
               <span></span> My Profile
@@ -131,9 +170,8 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
 
             <button
               type="button"
-              className={`${styles.navItem} ${
-                activeTab === 'bookings' ? styles.active : ''
-              }`}
+              className={`${styles.navItem} ${activeTab === 'bookings' ? styles.active : ''
+                }`}
               onClick={() => setActiveTab('bookings')}
             >
               <span></span> My Bookings
@@ -141,9 +179,8 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
 
             <button
               type="button"
-              className={`${styles.navItem} ${
-                activeTab === 'favourites' ? styles.active : ''
-              }`}
+              className={`${styles.navItem} ${activeTab === 'favourites' ? styles.active : ''
+                }`}
               onClick={() => setActiveTab('favourites')}
             >
               <span></span> Favourites
@@ -191,7 +228,7 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
                         setIsEditing(true)
                       }}
                     >
-                       Edit profile
+                      Edit profile
                     </button>
                   )}
                 </div>
@@ -308,61 +345,123 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
             </>
           )}
 
-{activeTab === 'bookings' && (
-  <section className={styles.section}>
-    <h1 className={styles.pageTitle}>My bookings</h1>
+          {activeTab === 'bookings' && (
+            <section className={styles.section}>
+              <h1 className={styles.pageTitle}>My bookings</h1>
+              {bookingMessage && <p className={styles.error}>{bookingMessage}</p>}
 
-    {bookings.length === 0 ? (
-      <div className={styles.emptyState}>
-        <span className={styles.emptyIcon}></span>
-        <h2>No bookings found</h2>
-        <p>You haven't made any bookings yet.</p>
-      </div>
-    ) : (
-      <div className={styles.bookingsList}>
-        {bookings.map((booking) => (
-          <div key={booking.id} className={styles.bookingCard}>
-            <div className={styles.bookingTop}>
-              <div>
-                <h3 className={styles.bookingHotel}>{booking.hotel_name}</h3>
-                <p className={styles.bookingRoom}>{booking.room_name}</p>
-              </div>
-              <span className={`${styles.badge} ${styles[booking.status]}`}>
-                {statusLabels[booking.status]}
-              </span>
-            </div>
+              {bookings.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <span className={styles.emptyIcon}></span>
+                  <h2>No bookings found</h2>
+                  <p>You haven't made any bookings yet.</p>
+                </div>
+              ) : (
+                <div className={styles.bookingsList}>
+                  {bookings.map((booking) => (
+                    <div key={booking.id} className={styles.bookingCard}>
+                      <div className={styles.bookingTop}>
+                        <div>
+                          <h3 className={styles.bookingHotel}>{booking.hotel_name}</h3>
+                          <p className={styles.bookingRoom}>{booking.room_name}</p>
+                        </div>
+                        <span className={`${styles.badge} ${styles[booking.status]}`}>
+                          {statusLabels[booking.status]}
+                        </span>
+                      </div>
 
-            <div className={styles.bookingRow}>
-              <span>Check-in</span>
-              <span>{formatDate(booking.check_in_date)}</span>
-            </div>
-            <div className={styles.bookingRow}>
-              <span>Check-out</span>
-              <span>{formatDate(booking.check_out_date)}</span>
-            </div>
-            <div className={styles.bookingRow}>
-              <span>Total</span>
-              <span>R {Number(booking.total_amount).toLocaleString('en-ZA')}</span>
-            </div>
+                      <div className={styles.bookingRow}>
+                        <span>Check-in</span>
+                        <span>{formatDate(booking.check_in_date)}</span>
+                      </div>
+                      <div className={styles.bookingRow}>
+                        <span>Check-out</span>
+                        <span>{formatDate(booking.check_out_date)}</span>
+                      </div>
+                      <div className={styles.bookingRow}>
+                        <span>Total</span>
+                        <span>R {Number(booking.total_amount).toLocaleString('en-ZA')}</span>
+                      </div>
 
-            <p className={styles.bookingRef}>Reference: {booking.booking_reference}</p>
-          </div>
-        ))}
-      </div>
-    )}
-  </section>
-)}
+                      <p className={styles.bookingRef}>Reference: {booking.booking_reference}</p>
+                      {(booking.status === 'awaiting_payment' || booking.status === 'confirmed') &&
+                        booking.check_in_date.slice(0, 10) > today && (
+                          <div className={styles.bookingActions}>
+                            {booking.status === 'awaiting_payment' && booking.payment_method === 'online' && (
+                              <button
+                                type="button"
+                                className={styles.payBtn}
+                                onClick={() => handlePayNow(booking.id)}
+                                disabled={busyId === booking.id}
+                              >
+                                {busyId === booking.id ? 'Please wait...' : 'Pay now'}
+                              </button>
+                            )}
+
+                            <button
+                              type="button"
+                              className={styles.cancelBookingBtn}
+                              onClick={() => handleCancelBooking(booking.id)}
+                              disabled={busyId === booking.id}
+                            >
+                              Cancel booking
+                            </button>
+                          </div>
+                        )}
+                    </div>
+
+
+                  ))}
+                </div>
+
+              )}
+            </section>
+          )}
           {activeTab === 'favourites' && (
             <section className={styles.section}>
               <h1 className={styles.pageTitle}>My favourites</h1>
-              <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}></span>
-                <h2>Your favourite hotels</h2>
-                <p>
-                  Hotels you save will appear here when your favourites
-                  data is connected.
-                </p>
-              </div>
+
+              {favourites.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <span className={styles.emptyIcon}></span>
+                  <h2>No favourites yet</h2>
+                  <p>Save hotels you like and they will show up here.</p>
+                  <Link to="/hotels" className={styles.browseLink}>Browse hotels</Link>
+                </div>
+              ) : (
+                <div className={styles.favouritesGrid}>
+                  {favourites.map((hotel) => (
+                    <div key={hotel.id} className={styles.favouriteCard}>
+                      {hotel.main_image ? (
+                        <img src={hotel.main_image} alt={hotel.name} className={styles.favouriteImage} />
+                      ) : (
+                        <div className={styles.favouriteNoImage}>No photo yet</div>
+                      )}
+
+                      <div className={styles.favouriteBody}>
+                        <h3 className={styles.favouriteName}>{hotel.name}</h3>
+                        <p className={styles.favouriteCity}>{hotel.city} · {hotel.star_rating} ⭐</p>
+                        <p className={styles.favouritePrice}>
+                          {hotel.price_from
+                            ? <>From <strong>R {Number(hotel.price_from).toLocaleString('en-ZA')}</strong> / night</>
+                            : 'No rooms yet'}
+                        </p>
+
+                        <div className={styles.favouriteActions}>
+                          <Link to={`/hotels/${hotel.id}`} className={styles.viewBtn}>View</Link>
+                          <button
+                            type="button"
+                            className={styles.removeBtn}
+                            onClick={() => dispatch(removeFavourite(hotel.id))}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           )}
         </main>
