@@ -544,6 +544,40 @@
   font-weight: 700;
 }
 
+.bookingActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.payBtn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancelBookingBtn {
+  background: #fff;
+  color: #B03A2E;
+  border: 1px solid var(--border);
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.payBtn:disabled,
+.cancelBookingBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 700px) {
   .favouritesGrid {
     grid-template-columns: 1fr;
