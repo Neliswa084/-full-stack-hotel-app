@@ -12,7 +12,8 @@ export const Hotels = () => {
   const { hotels, loading, error } = useSelector((state: RootState) => state.hotels)
 
   // If the landing page search sends ?location=..., it fills this in
-  const [location, setLocation] = useState(searchParams.get('location') || '')
+  const [location, setLocation] = useState(searchParams.get('city') || '')
+  
   const [maxPrice, setMaxPrice] = useState('')
   const [minStars, setMinStars] = useState('0')
   const [minRating, setMinRating] = useState('0')
