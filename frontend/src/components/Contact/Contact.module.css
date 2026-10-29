@@ -1,0 +1,86 @@
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  color: var(--navy);
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.intro {
+  color: var(--text-soft);
+  text-align: center;
+  margin: 0 0 32px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.boxTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  color: var(--navy);
+  margin: 0 0 16px;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 14px 0 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+textarea.input {
+  min-height: 120px;
+}
+
+.button {
+  width: 100%;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.thanks {
+  text-align: center;
+  padding: 24px 0;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
