@@ -11,7 +11,8 @@ import usersReducer from './reducers/adminUsersSlice';
 import bookingsReducer from './reducers/adminBookingsSlice';
 import reviewsReducer from './reducers/reviewsSlice';
 import guestBookingsReducer from './reducers/bookingSlice';
-import paymentReducer from './reducers/paymentSlice'
+import paymentReducer from './reducers/paymentSlice';
+import favouritesReducer from './reducers/favouritesSlice'
 
 const store = configureStore ({
     reducer : {
@@ -27,7 +28,8 @@ const store = configureStore ({
         bookings: bookingsReducer,
         reviews: reviewsReducer,
         bookingGuest:guestBookingsReducer,
-        payments: paymentReducer
+        payments: paymentReducer,
+        favourites: favouritesReducer
     }
 })
 
