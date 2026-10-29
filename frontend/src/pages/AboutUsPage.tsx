@@ -1,12 +1,13 @@
-import React from 'react'
+import { NavBar } from '../components/NavBar/NavBar'
+import { Footer } from '../components/Footer/Footer'
+import { AboutUs } from '../components/AboutUs/AboutUs'
 
 export const AboutUsPage = () => {
   return (
     <>
-    <div>AboutUsPage</div>
-
-    <p> We are here to help you  </p>
-
+      <NavBar />
+      <AboutUs />
+      <Footer />
     </>
   )
 }
