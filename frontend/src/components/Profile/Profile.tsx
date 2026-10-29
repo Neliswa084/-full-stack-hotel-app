@@ -9,6 +9,17 @@ import { fetchUserBooking } from '../../redux/reducers/bookingSlice'
 
 
 type ProfileTab = 'profile' | 'bookings' | 'favourites'
+const formatDate = (date: string) =>
+  new Date(date.slice(0, 10) + 'T00:00:00').toLocaleDateString('en-ZA', {
+    day: 'numeric', month: 'short', year: 'numeric',
+  })
+
+const statusLabels: Record<string, string> = {
+  awaiting_payment: 'Awaiting payment',
+  confirmed: 'Confirmed',
+  completed: 'Completed',
+  cancelled: 'Cancelled',
+}
 
 export const Profile = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -297,11 +308,10 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
             </>
           )}
 
-   {activeTab === 'bookings' && (
+{activeTab === 'bookings' && (
   <section className={styles.section}>
     <h1 className={styles.pageTitle}>My bookings</h1>
 
-  
     {bookings.length === 0 ? (
       <div className={styles.emptyState}>
         <span className={styles.emptyIcon}></span>
@@ -309,14 +319,33 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
         <p>You haven't made any bookings yet.</p>
       </div>
     ) : (
-
       <div className={styles.bookingsList}>
         {bookings.map((booking) => (
           <div key={booking.id} className={styles.bookingCard}>
-            <h3>{booking.booking_reference || 'Booking Details'}</h3>
-            <p><strong> Check In Date:</strong> {booking.check_in_date}</p>
-            <p><strong> Check Out Date:</strong> {booking.check_out_date}</p>
-            <p><strong>Status:</strong> {booking.status}</p>
+            <div className={styles.bookingTop}>
+              <div>
+                <h3 className={styles.bookingHotel}>{booking.hotel_name}</h3>
+                <p className={styles.bookingRoom}>{booking.room_name}</p>
+              </div>
+              <span className={`${styles.badge} ${styles[booking.status]}`}>
+                {statusLabels[booking.status]}
+              </span>
+            </div>
+
+            <div className={styles.bookingRow}>
+              <span>Check-in</span>
+              <span>{formatDate(booking.check_in_date)}</span>
+            </div>
+            <div className={styles.bookingRow}>
+              <span>Check-out</span>
+              <span>{formatDate(booking.check_out_date)}</span>
+            </div>
+            <div className={styles.bookingRow}>
+              <span>Total</span>
+              <span>R {Number(booking.total_amount).toLocaleString('en-ZA')}</span>
+            </div>
+
+            <p className={styles.bookingRef}>Reference: {booking.booking_reference}</p>
           </div>
         ))}
       </div>

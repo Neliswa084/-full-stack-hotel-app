@@ -383,6 +383,80 @@
   font-size: 13px;
   line-height: 1.7;
 }
+.bookingsList {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.bookingCard {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.bookingTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.bookingHotel {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: var(--navy);
+  margin: 0;
+}
+
+.bookingRoom {
+  color: var(--text-soft);
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+
+.bookingRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.bookingRef {
+  color: var(--text-soft);
+  font-size: 13px;
+  margin: 12px 0 0;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.confirmed {
+  background: #E3F4E8;
+  color: #1E7A3C;
+}
+
+.awaiting_payment {
+  background: #FFF3D6;
+  color: #9A6A00;
+}
+
+.completed {
+  background: #E6EDF7;
+  color: var(--navy);
+}
+
+.cancelled {
+  background: #FBE4E1;
+  color: #B03A2E;
+}
 
 /* Tablet */
 
