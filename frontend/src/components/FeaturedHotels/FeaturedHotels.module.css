@@ -1,7 +1,8 @@
 .section {
-  max-width: 1200px;
+max-width: 1800px;
+  width: calc(100% - 48px);
   margin: 0 auto;
-  padding: 72px 24px 0;
+  padding: 72px 0 0;
   text-align: center;
 }
 

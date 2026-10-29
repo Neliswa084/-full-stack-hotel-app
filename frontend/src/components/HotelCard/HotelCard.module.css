@@ -15,7 +15,7 @@
 
 .imageBox {
   position: relative;
-  height: 180px;
+  height: 220px;
   margin: 8px 8px 0;
   border-radius: 12px;
   overflow: hidden;
@@ -68,7 +68,7 @@
 
 .name {
   font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--navy);
   margin: 0;
@@ -82,7 +82,7 @@
 }
 
 .city {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-soft);
   margin: 4px 0 10px;
 }
@@ -92,6 +92,7 @@
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 16px;
+    font-size: 12px;
 }
 
 .tag {
@@ -118,16 +119,17 @@
 .price strong {
   font-size: 17px;
   color: var(--navy);
+   font-size: 19px;
 }
 
 .viewButton {
   background: var(--navy);
   color: #fff;
   border: none;
-  padding: 8px 18px;
+  padding: 10px 22px;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
 }
 
