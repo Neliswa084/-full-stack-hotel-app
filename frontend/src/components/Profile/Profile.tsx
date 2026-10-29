@@ -6,6 +6,8 @@ import { logout  ,updateProfile} from '../../redux/reducers/loginSlice'
 import { useNavigate ,Navigate } from 'react-router-dom'
 import type {AppDispatch, RootState } from '../../redux/store'
 import { fetchUserBooking } from '../../redux/reducers/bookingSlice'
+import { Link } from 'react-router-dom'
+import { fetchFavourites, removeFavourite } from '../../redux/reducers/favouritesSlice'
 
 
 type ProfileTab = 'profile' | 'bookings' | 'favourites'
@@ -28,6 +30,7 @@ export const Profile = () => {
   const currentUser = useSelector((state: RootState) => state.login.currentUser)
   const profileError = useSelector((state: RootState) => state.login.error)
   const bookings = useSelector((state: RootState) => state.bookingGuest.bookings)
+  const favourites = useSelector((state: RootState) => state.favourites.favourites)
 
   const [activeTab, setActiveTab] = useState<ProfileTab>('profile')
   const [isEditing, setIsEditing] = useState(false)
@@ -43,7 +46,8 @@ export const Profile = () => {
 
 
   useEffect(() => {
-    dispatch(fetchUserBooking())
+     dispatch(fetchUserBooking())
+  dispatch(fetchFavourites())
   }, [dispatch])
   
   useEffect(() => {
@@ -352,19 +356,53 @@ const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     )}
   </section>
 )}
-          {activeTab === 'favourites' && (
-            <section className={styles.section}>
-              <h1 className={styles.pageTitle}>My favourites</h1>
-              <div className={styles.emptyState}>
-                <span className={styles.emptyIcon}></span>
-                <h2>Your favourite hotels</h2>
-                <p>
-                  Hotels you save will appear here when your favourites
-                  data is connected.
-                </p>
+     {activeTab === 'favourites' && (
+  <section className={styles.section}>
+    <h1 className={styles.pageTitle}>My favourites</h1>
+
+    {favourites.length === 0 ? (
+      <div className={styles.emptyState}>
+        <span className={styles.emptyIcon}></span>
+        <h2>No favourites yet</h2>
+        <p>Save hotels you like and they will show up here.</p>
+        <Link to="/hotels" className={styles.browseLink}>Browse hotels</Link>
+      </div>
+    ) : (
+      <div className={styles.favouritesGrid}>
+        {favourites.map((hotel) => (
+          <div key={hotel.id} className={styles.favouriteCard}>
+            {hotel.main_image ? (
+              <img src={hotel.main_image} alt={hotel.name} className={styles.favouriteImage} />
+            ) : (
+              <div className={styles.favouriteNoImage}>No photo yet</div>
+            )}
+
+            <div className={styles.favouriteBody}>
+              <h3 className={styles.favouriteName}>{hotel.name}</h3>
+              <p className={styles.favouriteCity}>{hotel.city} · {hotel.star_rating} ⭐</p>
+              <p className={styles.favouritePrice}>
+                {hotel.price_from
+                  ? <>From <strong>R {Number(hotel.price_from).toLocaleString('en-ZA')}</strong> / night</>
+                  : 'No rooms yet'}
+              </p>
+
+              <div className={styles.favouriteActions}>
+                <Link to={`/hotels/${hotel.id}`} className={styles.viewBtn}>View</Link>
+                <button
+                  type="button"
+                  className={styles.removeBtn}
+                  onClick={() => dispatch(removeFavourite(hotel.id))}
+                >
+                  Remove
+                </button>
               </div>
-            </section>
-          )}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+)}
         </main>
       </div>
     </div>
