@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "ts-node src/server.ts",
+    "build": "echo no build needed",
+    "start": "tsx src/server.ts",
     "dev": "nodemon --exec npx tsx src/server.ts"
   },
   "keywords": [],
@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
   "devDependencies": {
@@ -31,7 +32,6 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/pg": "^8.23.1",
-    "nodemon": "^3.1.14",
-    "tsx": "^4.23.15"
+    "nodemon": "^3.1.14"
   }
 }
