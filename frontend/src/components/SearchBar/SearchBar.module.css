@@ -1,0 +1,76 @@
+.bar {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.field input,
+.field select {
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: #fff;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--navy);
+}
+
+.button {
+  height: 44px;
+  padding: 0 28px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--navy-dark);
+}
+
+@media (max-width: 900px) {
+  .bar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .field:first-child,
+  .button {
+    grid-column: 1 / -1;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .bar {
+    grid-template-columns: 1fr;
+  }
+}

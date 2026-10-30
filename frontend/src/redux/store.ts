@@ -1,0 +1,38 @@
+import { configureStore } from "@reduxjs/toolkit";
+import signUpReducer from './reducers/signUpSlice';
+import loginReducer from './reducers/loginSlice';
+import hotelReducer from './reducers/hotelSlice';
+import adminReducer from './reducers/adminSlice';
+import adminHotelReducer from './reducers/adminHotelsSlice';
+import roomsReducer from './reducers/roomsSlice';
+import photosReducer from './reducers/photosSlice';
+import amenitiesReducer from './reducers/amenitiesSlice';
+import usersReducer from './reducers/adminUsersSlice';
+import bookingsReducer from './reducers/adminBookingsSlice';
+import reviewsReducer from './reducers/reviewsSlice';
+import guestBookingsReducer from './reducers/bookingSlice';
+import paymentReducer from './reducers/paymentSlice';
+import favouritesReducer from './reducers/favouritesSlice'
+
+const store = configureStore ({
+    reducer : {
+        signUp: signUpReducer,
+        login: loginReducer,
+        hotels: hotelReducer,
+        admin : adminReducer,
+        adminHotels: adminHotelReducer,
+        rooms: roomsReducer,
+        photos: photosReducer,
+        amenities: amenitiesReducer,
+        users: usersReducer,
+        bookings: bookingsReducer,
+        reviews: reviewsReducer,
+        bookingGuest:guestBookingsReducer,
+        payments: paymentReducer,
+        favourites: favouritesReducer
+    }
+})
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+export default store

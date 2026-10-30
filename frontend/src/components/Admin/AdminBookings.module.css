@@ -1,0 +1,47 @@
+/* Booking filter */
+.filter {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: inherit;
+  color: var(--navy);
+  background: #fff;
+}
+
+/* Booking status pills */
+.awaiting_payment,
+.confirmed,
+.completed,
+.cancelled {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.awaiting_payment {
+  background: #FFF4E0;
+  color: #A86A00;
+}
+
+.confirmed {
+  background: #E3F5EA;
+  color: #1E7A44;
+}
+
+.completed {
+  background: #E6ECF5;
+  color: var(--navy);
+}
+
+.cancelled {
+  background: #FDE8E6;
+  color: #B03A2E;
+}
+
+.modal textarea:disabled {
+  background: #EEF1F5;
+  color: var(--text-muted);
+}

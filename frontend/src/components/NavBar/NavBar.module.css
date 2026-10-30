@@ -1,0 +1,89 @@
+.header {
+    padding: 20px 24px 16px;
+}
+
+.nav {
+    
+    max-width: 1800px;
+    width: calc(100% - 48px);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 10px 10px 10px 22px;
+    box-shadow: 0 6px 24px rgba(19, 41, 75, 0.08);
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--navy);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: 0.06em;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.link {
+    padding: 10px 16px;
+    border-radius: 999px;
+    color: var(--text-soft);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.link:hover {
+    background: var(--bg);
+}
+
+.active {
+    background: var(--bg);
+    color: var(--navy);
+    font-weight: 700;
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 46px;
+    padding: 0 24px;
+    border-radius: 999px;
+    background: var(--navy);
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.cta:hover {
+    background: var(--navy-dark);
+}
+
+@media (max-width: 640px) {
+    .nav {
+        padding: 12px;
+        border-radius: 16px;
+    }
+
+    .links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+}
