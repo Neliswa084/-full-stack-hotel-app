@@ -10,7 +10,7 @@ export default defineConfig({
     proxy: {
       // Intercepts any request starting with /api
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'https://budgie-stays-api.onrender.com',
         changeOrigin: true,
         secure: false,
       }

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from '../../redux/store'
 import { fetchHotelById } from '../../redux/reducers/hotelSlice'
 import styles from './HotelDetails.module.css'
-import { ArrowLeft, Heart } from 'lucide-react';
+import { ArrowLeft, Heart ,Share2 } from 'lucide-react';
 import { fetchPhotos } from '../../redux/reducers/photosSlice'
 import { fetchRooms } from '../../redux/reducers/roomsSlice'
 import { fetchHotelAmenities } from '../../redux/reducers/amenitiesSlice'
@@ -26,6 +26,7 @@ export const HotelDetails = () => {
 
   const [rating, setRating] = useState('5')
   const [comment, setComment] = useState('')
+  const [shareMessage, setShareMessage] = useState('')
 
 
 
@@ -87,6 +88,24 @@ export const HotelDetails = () => {
     }
   }
 
+  const handleShare = async () => {
+  const link = window.location.href
+
+  if (navigator.share) {
+    // Phones: open the phone's share menu
+    await navigator.share({
+      title: selectedHotel?.name,
+      text: `Check out ${selectedHotel?.name} on Budgie Stays`,
+      url: link,
+    })
+  } else {
+    // Computers: copy the link
+    await navigator.clipboard.writeText(link)
+    setShareMessage('Link copied!')
+    setTimeout(() => setShareMessage(''), 2000)
+  }
+}
+
 
   if (loading) return <p className={styles.message}>Loading...</p>
   if (error) return <p className={styles.message}>{error}</p>
@@ -147,14 +166,23 @@ export const HotelDetails = () => {
         <ArrowLeft size={18} className={styles.icon} aria-hidden="true" />
         Back to hotels
       </Link>
-      <div className={styles.titleRow}>
-        <h1 className={styles.name}>{selectedHotel.name}</h1>
+    <div className={styles.titleRow}>
+  <h1 className={styles.name}>{selectedHotel.name}</h1>
 
-        <button type="button" className={styles.favouriteButton} onClick={handleFavourite}>
-          <Heart size={18} fill={isFavourite ? 'currentColor' : 'none'} aria-hidden="true" />
-          {isFavourite ? 'Saved' : 'Save'}
-        </button>
-      </div>
+  <div className={styles.titleButtons}>
+    <button type="button" className={styles.favouriteButton} onClick={handleShare}>
+      <Share2 size={18} aria-hidden="true" />
+      Share
+    </button>
+
+    <button type="button" className={styles.favouriteButton} onClick={handleFavourite}>
+      <Heart size={18} fill={isFavourite ? 'currentColor' : 'none'} aria-hidden="true" />
+      {isFavourite ? 'Saved' : 'Save'}
+    </button>
+  </div>
+</div>
+
+{shareMessage && <p className={styles.shareMessage}>{shareMessage}</p>}
 
       <p className={styles.location}>
         {selectedHotel.address}, {selectedHotel.city} · {selectedHotel.star_rating} ⭐
@@ -190,6 +218,8 @@ export const HotelDetails = () => {
         <p className={styles.description}>
           {selectedHotel.description || 'No description yet.'}
         </p>
+              </section>
+
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Amenities</h2>
 
@@ -326,7 +356,7 @@ export const HotelDetails = () => {
           ></iframe>
 
         </section>
-      </section>
+
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Hotel policies</h2>
 

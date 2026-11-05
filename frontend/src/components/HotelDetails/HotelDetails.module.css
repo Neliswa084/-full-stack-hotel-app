@@ -394,6 +394,19 @@ textarea.formInput {
   cursor: pointer;
 }
 
+.titleButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.shareMessage {
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 4px 0 0;
+  text-align: right;
+}
+
 @media (max-width: 600px) {
   .roomCard {
     flex-direction: column;
