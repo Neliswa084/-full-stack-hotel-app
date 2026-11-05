@@ -13,6 +13,8 @@ import reviewsRoutes from "./routes/reviewsRoutes";
 import favouriteRoutes from "./routes/favouriteRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
+
 
 
 
@@ -39,6 +41,7 @@ const startServer = async () => {
   app.use("/api/favourites", favouriteRoutes);
   app.use("/api/admin", adminRoutes);
   app.use("/api/payments", paymentRoutes);
+  app.use("/api/notifications", notificationRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
