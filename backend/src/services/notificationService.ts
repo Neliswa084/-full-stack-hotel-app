@@ -38,3 +38,19 @@ export const markAllAsRead = async (userId: number): Promise<void> => {
         [userId]
     );
 };
+
+// Used by other controllers. If the notification fails, the booking or payment still works.
+export const notifyUser = async (
+    userId: number | null,
+    type: NotificationType,
+    title: string,
+    message: string
+) => {
+    if (!userId) return;
+
+    try {
+        await createNotification(userId, type, title, message);
+    } catch (error) {
+        console.error("Failed to create notification", error);
+    }
+};
