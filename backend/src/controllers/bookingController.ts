@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as bookingService from "../services/bookingService";
 import { BookingStatus } from "../models/booking.model";
+import { notifyUser } from "../services/notificationService";
 
 const PAYMENT_METHODS = ["online", "cash_at_hotel", "card_at_hotel", "eft"];
 const STATUSES = ["awaiting_payment", "confirmed", "completed", "cancelled"];
@@ -100,6 +101,22 @@ export const addBooking = async (req: Request, res: Response) => {
             status: method === "online" ? "awaiting_payment" : "confirmed"
         });
 
+        if (booking.status === "confirmed") {
+            await notifyUser(
+                user.id,
+                "booking_confirmation",
+                "Booking confirmed",
+                `Your booking ${booking.booking_reference} is confirmed. Please pay at the hotel when you arrive.`
+            );
+        } else {
+            await notifyUser(
+                user.id,
+                "booking_update",
+                "Booking received",
+                `Your booking ${booking.booking_reference} is waiting for payment.`
+            );
+        }
+
         res.status(201).json({ message: "Booking created", booking, nights });
     } catch (error) {
         res.status(500).json({ message: "Failed to create booking" });
@@ -160,6 +177,12 @@ export const cancelMyBooking = async (req: Request, res: Response) => {
         }
 
         const updated = await bookingService.updateBookingStatus(id, "cancelled");
+        await notifyUser(
+            req.user!.id,
+            "booking_update",
+            "Booking cancelled",
+            `Your booking ${booking.booking_reference} has been cancelled.`
+        );
         res.status(200).json({ message: "Booking cancelled", booking: updated });
     } catch (error) {
         res.status(500).json({ message: "Failed to cancel booking" });
