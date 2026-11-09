@@ -2,6 +2,7 @@ import styles from './NavBar.module.css'
 import { Link, NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../../redux/store'
+import { NotificationBell } from '../NotificationBell/NotificationBell'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
   isActive ? `${styles.link} ${styles.active}` : styles.link
@@ -18,7 +19,6 @@ export const NavBar = () => {
           </svg>
           BUDGIE STAYS
         </Link>
-
         <div className={styles.links}>
           <NavLink to="/" end className={linkClass}>Home</NavLink>
           <NavLink to="/hotels" className={linkClass}>Hotels</NavLink>
@@ -26,11 +26,15 @@ export const NavBar = () => {
           <NavLink to="/contact" className={linkClass}>Contact</NavLink>
         </div>
 
-        {currentUser ? (
-          <Link to="/profile" className={styles.cta}>Profile</Link>
-        ) : (
-          <Link to="/login" className={styles.cta}>Get Started</Link>
-        )}
+        <div className={styles.rightSide}>
+          <NotificationBell />
+
+          {currentUser ? (
+            <Link to="/profile" className={styles.cta}>Profile</Link>
+          ) : (
+            <Link to="/login" className={styles.cta}>Get Started</Link>
+          )}
+        </div>
       </nav>
     </header>
   )
