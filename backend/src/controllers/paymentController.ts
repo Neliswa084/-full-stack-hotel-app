@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import axios from "axios";
 import * as bookingService from "../services/bookingService";
 import * as paymentService from "../services/paymentService";
+import { notifyUser } from "../services/notificationService";
 
 // Start the payment and get the Paystack payment link
 export const initializePayment = async (req: Request, res: Response) => {
@@ -88,6 +89,12 @@ export const verifyPayment = async (req: Request, res: Response) => {
         if (paystackStatus === "success" && paidAmount === expectedAmount) {
             await paymentService.markPaymentSucceeded(payment.id);
             const updatedBooking = await bookingService.updateBookingStatus(payment.booking_id, "confirmed");
+            await notifyUser(
+                booking.user_id,
+                "booking_confirmation",
+                "Payment received",
+                `We received your payment of R ${payment.amount}. Your booking ${booking.booking_reference} is confirmed.`
+            );
             return res.status(200).json({ message: "Payment successful", booking: updatedBooking });
         }
 

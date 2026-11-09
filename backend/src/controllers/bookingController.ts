@@ -3,6 +3,7 @@ import * as bookingService from "../services/bookingService";
 import { BookingStatus } from "../models/booking.model";
 import { notifyUser } from "../services/notificationService";
 
+
 const PAYMENT_METHODS = ["online", "cash_at_hotel", "card_at_hotel", "eft"];
 const STATUSES = ["awaiting_payment", "confirmed", "completed", "cancelled"];
 
@@ -216,6 +217,12 @@ export const changeBookingStatus = async (req: Request, res: Response) => {
         if (!booking) {
             return res.status(404).json({ message: "Booking not found" });
         }
+        await notifyUser(
+    booking.user_id,
+    "booking_update",
+    "Booking updated",
+    `Your booking ${booking.booking_reference} is now ${booking.status.replace("_", " ")}.`
+);
 
         res.status(200).json({ message: "Booking status updated", booking });
     } catch (error) {
