@@ -12,7 +12,8 @@ import bookingsReducer from './reducers/adminBookingsSlice';
 import reviewsReducer from './reducers/reviewsSlice';
 import guestBookingsReducer from './reducers/bookingSlice';
 import paymentReducer from './reducers/paymentSlice';
-import favouritesReducer from './reducers/favouritesSlice'
+import favouritesReducer from './reducers/favouritesSlice';
+   import notificationsReducer from './reducers/notificationsSlice'
 
 const store = configureStore ({
     reducer : {
@@ -29,7 +30,8 @@ const store = configureStore ({
         reviews: reviewsReducer,
         bookingGuest:guestBookingsReducer,
         payments: paymentReducer,
-        favourites: favouritesReducer
+        favourites: favouritesReducer,
+        notifications: notificationsReducer,
     }
 })
 
