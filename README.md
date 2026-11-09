@@ -1,4 +1,5 @@
 # Budgie Stays
+<img src="https://socialify.git.ci/Neliswa084/-full-stack-hotel-app/image?language=1&owner=1&name=1&stargazers=1&theme=Light" alt="-full-stack-hotel-app" width="640" height="320" />
 
 Budgie Stays is a full-stack hotel booking app for budget-friendly stays across South Africa. Guests can search hotels, view photos, rooms and reviews, book a stay and pay online. Admins manage hotels, rooms, bookings and users from an admin panel.
 
@@ -79,7 +80,7 @@ The backend follows **routes → controllers → services**. Routes define the U
 ### 1. Clone the project
 
 ```bash
-git clone [your repository link]
+git clone [https://github.com/Neliswa084/-full-stack-hotel-app]
 cd full-stack-hotel-app
 ```
 
