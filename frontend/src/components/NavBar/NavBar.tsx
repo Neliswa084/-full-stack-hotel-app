@@ -29,10 +29,12 @@ export const NavBar = () => {
         <div className={styles.rightSide}>
           <NotificationBell />
 
-          {currentUser ? (
-            <Link to="/profile" className={styles.cta}>Profile</Link>
-          ) : (
+          {!currentUser ? (
             <Link to="/login" className={styles.cta}>Get Started</Link>
+          ) : currentUser.role === 'admin' ? (
+            <Link to="/admin" className={styles.cta}>Dashboard</Link>
+          ) : (
+            <Link to="/profile" className={styles.cta}>Profile</Link>
           )}
         </div>
       </nav>
